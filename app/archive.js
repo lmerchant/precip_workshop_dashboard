@@ -48,12 +48,26 @@ async function showPage(archive, page) {
   // renderMarkdown escapes the file's text before adding markup.
   panel.innerHTML = `<article class="prose">${date}${renderMarkdown(text, { headingOffset: 1 })}</article>`;
 
-  // The research question and what was searched go right under the
-  // page's title (its first <h2>).
-  const scope = await researchScopeHtml(page);
+  // Under the page's title (its first <h2>): the R* query the research
+  // started from, then the research question and what was searched.
+  const [query, scope] = await Promise.all([rstarQueryHtml(page), researchScopeHtml(page)]);
   const title = panel.querySelector(".prose h2");
-  if (scope && title) title.insertAdjacentHTML("afterend", scope);
+  if (title && (query || scope)) title.insertAdjacentHTML("afterend", query + scope);
   panel.removeAttribute("aria-busy");
+}
+
+// The page's "query" file (rstar_query.md, copied in by the import
+// script), rendered from Markdown; its "###" heading becomes an <h3>
+// under the page title. Returns "" if there is none or it can't load.
+async function rstarQueryHtml(page) {
+  if (!page.query) return "";
+  try {
+    const res = await fetch(page.query, { cache: "no-cache" });
+    if (!res.ok) return "";
+    return `<div class="rstar-query">${renderMarkdown(await res.text())}</div>`;
+  } catch {
+    return "";
+  }
 }
 
 // From the page's "record" file (written by scripts/import_archive_page.py

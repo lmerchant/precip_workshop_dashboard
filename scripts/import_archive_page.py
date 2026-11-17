@@ -15,19 +15,25 @@ the fields the page shows to a small JSON file next to DEST (same name,
   { "question": <the record's "question">,
     "searched_on": [<each "question" in the record's "subquestions">] }
 
+With --query, it copies the R* query statement the research started from
+(rstar_query.md) to DEST's name with a .query.md ending.
+
 Usage (from the project folder):
 
-    python3 scripts/import_archive_page.py SOURCE.md DEST.md [--record research-record.json]
+    python3 scripts/import_archive_page.py SOURCE.md DEST.md \
+      [--record research-record.json] [--query rstar_query.md]
 
 Example:
 
     python3 scripts/import_archive_page.py \
       my_docs/about_data/rstar_query_results/archive_answers/A1_Rstar_query/2026-11-17_noaa-ncei-threats/answer_A1_Rstar_query_chatgpt-noaa_ncei.md \
       app/content/archives/noaa-ncei/threats-2026-11-17.md \
-      --record my_docs/about_data/rstar_query_results/archive_answers/A1_Rstar_query/2026-11-17_noaa-ncei-threats/research-record.json
+      --record my_docs/about_data/rstar_query_results/archive_answers/A1_Rstar_query/2026-11-17_noaa-ncei-threats/research-record.json \
+      --query my_docs/about_data/rstar_query_results/archive_answers/A1_Rstar_query/2026-11-17_noaa-ncei-threats/rstar_query.md
 
 After a new page is copied in, add it to the archive's "pages" list in
-app/data/archives.json ("file" for the .md, "record" for the .json).
+app/data/archives.json ("file" for the .md, "record" for the .json,
+"query" for the .query.md).
 """
 
 import argparse
@@ -68,6 +74,7 @@ def main() -> int:
     parser.add_argument("source", type=Path, help="research answer (.md)")
     parser.add_argument("dest", type=Path, help="where to write it under app/content/")
     parser.add_argument("--record", type=Path, help="the answer's research-record.json")
+    parser.add_argument("--query", type=Path, help="the R* query statement (rstar_query.md)")
     args = parser.parse_args()
 
     cleaned = clean(args.source.read_text(encoding="utf-8"))
@@ -80,6 +87,11 @@ def main() -> int:
         out = args.dest.with_suffix(".json")
         out.write_text(json.dumps(fields, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"Wrote {out} (question + {len(fields['searched_on'])} searched-on items)")
+
+    if args.query:
+        out = args.dest.with_suffix(".query.md")
+        out.write_text(args.query.read_text(encoding="utf-8").rstrip() + "\n", encoding="utf-8")
+        print(f"Wrote {out}")
     return 0
 
 

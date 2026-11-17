@@ -699,6 +699,25 @@ body {
   margin: 0 0 14px;
 }
 
+/* R* query statement (from the page's query file) */
+.rstar-query {
+  background: var(--panel-bg);
+  border-left: 4px solid var(--dataset-card-rule);
+  padding: 14px 18px 2px;
+  margin: 0 0 20px;
+}
+
+/* Same size as the other h3s (18px): between h2 (24px) and body text (15px) */
+.prose .rstar-query h3 {
+  margin: 0 0 8px;
+  padding-top: 0;
+  border-top: none;
+}
+
+.rstar-query p {
+  margin-bottom: 12px;
+}
+
 /* Research question and "Searched on" list (from the page's record file) */
 .research-scope {
   margin: 0 0 24px;

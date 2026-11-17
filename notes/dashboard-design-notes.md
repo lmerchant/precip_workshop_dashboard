@@ -134,10 +134,15 @@ there. First one: NOAA NCEI, from the user's research answer
     hand" / "Sites to trust" items). With `--record research-record.json`
     it also writes `<page>.json` next to the .md with
     `{ "question", "searched_on": [each subquestion's "question"] }`.
-    Then add the page to `archives.json` (`file` = .md, `record` = .json).
-- **Research scope**: when a page has a `record`, the page shows
-  "**Question:** <question>" and a "Searched on" list right under the
-  page's title (its first `<h2>`), above the direct answer.
+    With `--query rstar_query.md` it copies the R* query statement the
+    research started from to `<page>.query.md`.
+    Then add the page to `archives.json` (`file` = .md, `record` = .json,
+    `query` = .query.md).
+- **Under the page title** (its first `<h2>`), above the direct answer:
+  1. the R* query (from `query`), rendered from Markdown in a pale box
+     with a teal left rule; its `###` heading becomes an `<h3>`, styled
+     like the other h3s (18px; h2 is 24px, body 15px) but with no top rule;
+  2. "**Question:** <question>" and a "Searched on" list (from `record`).
 - **Dropdown link**: in the metadata grid, each archive in "Data archive(s)"
   that has a page is a link "NOAA NCEI — about this archive"; the others stay
   plain text. 8 datasets link to NCEI (6 NCEI only, 2 with a second archive).

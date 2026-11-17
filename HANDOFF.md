@@ -1,6 +1,6 @@
 # Handoff — Precipitation Workshop Dashboard
 
-_Last updated: 2026-11-17 (session 3, in progress)_
+_Last updated: 2026-11-17 (end of session 3)_
 
 ## What exists
 
@@ -15,7 +15,9 @@ _Last updated: 2026-11-17 (session 3, in progress)_
     (`archive.html?id=noaa-ncei`), see "Archive pages" in the design notes
   - `shared.js` (helpers for both pages), `markdown.js` (Markdown renderer)
   - `data/archives.json` — archives that have pages, and their pages
-  - `content/archives/<id>/*.md` — archive page text (Markdown)
+  - `content/archives/<id>/` — per archive page: `<page>.md` (text),
+    `<page>.json` (research question + "searched on" list),
+    `<page>.query.md` (R* query statement)
   - `data/datasets.json` — the dataset data (41 datasets), including each
     dataset's `access_endpoints` list. This is now the file to edit; format in
     `notes/dashboard-design-notes.md`.
@@ -37,15 +39,20 @@ _Last updated: 2026-11-17 (session 3, in progress)_
   and will add it as new JSON fields.
 - Current layout/color design: `my_docs/html_css_design/images/new_dashboard_layout_2026-11-17-6.46am.png`
 - Design decisions: `notes/dashboard-design-notes.md`
-- `scripts/import_archive_page.py` — copies a research answer into
-  `app/content/` and strips references to the research project's files.
+- `scripts/import_archive_page.py SOURCE.md DEST.md [--record
+  research-record.json] [--query rstar_query.md]` — copies a research
+  answer into `app/content/` (stripping references to the research
+  project's files) plus the record fields and R* query; then list the page
+  in `app/data/archives.json`. Run from the project folder.
 - Research results (user's, from another project):
-  `my_docs/about_data/rstar_query_results/archive_answers/...`. The user
-  will pick fields from each `research-record.json` later (not used yet).
+  `my_docs/about_data/rstar_query_results/archive_answers/<query>/<date_topic>/`
+  with `answer_*.md`, `research-record.json`, `rstar_query.md`. Only
+  `question` and `subquestions[].question` from the record are used so far;
+  the user is still choosing other fields.
 
 ## How to run
 
-The page fetches the CSV, so it needs a local web server (opening the file
+The pages fetch their JSON and Markdown files, so they need a local web server (opening the file
 directly shows an error message with these steps). From the `app/` folder:
 
     python3 -m http.server 3000 --bind 127.0.0.1
@@ -65,7 +72,7 @@ site is on GitHub Pages via the Actions workflow, which publishes `app/` as-is. 
 needed (it can build one page per dataset from the CSV). Next.js static export
 was considered and set aside. Revisit when the dataset detail page is built.
 
-## Current state (after session 2)
+## Current state (after session 3)
 
 - 41 datasets render as cards (the user removed a duplicate "PRISM" row);
   click a card to open the detail panel, which ends with a "Data access
@@ -83,11 +90,19 @@ was considered and set aside. Revisit when the dataset detail page is built.
 - Search, filters and open cards are stored in the URL (`?q=&category=a,b&coverage=&open=`),
   which is the hook for restoring the dashboard after the future dataset page.
 
-- (Session 3) Each dataset panel links its archive to an archive page when
-  one exists ("NOAA NCEI — about this archive"). The NCEI page shows the
-  threat assessment from the user's research, a "Datasets in this archive"
-  list, and a back link that restores the dashboard state. More pages per
-  archive become tabs.
+- Archive pages (session 3): each dataset panel links its archive to an
+  archive page when one exists ("NOAA NCEI — about this archive"; 8
+  datasets). The NCEI page (`archive.html?id=noaa-ncei`) shows, under the
+  report title: the R* query box, "**Question:**" and a "Searched on" list,
+  then the threat-assessment report; at the bottom a "Datasets in this
+  archive" list whose links open and scroll to that card on the dashboard.
+  "← Back to dashboard" restores the search, filters and open cards. Two
+  or more pages per archive show as tabs (tested). Content indented 40px.
+- `app/` is self-contained; the only outside resource is Google Fonts (IBM
+  Plex), which the user chose to keep.
+- Session 3's work is committed on `develop` but NOT yet merged to `main`
+  or pushed, so the live site doesn't have archive pages yet. Give the user
+  the publish command (Working preferences) when they want it live.
 
 ## Open questions for the user
 
@@ -132,7 +147,10 @@ was considered and set aside. Revisit when the dataset detail page is built.
   Then: 40px left indent on the archive page, and its dataset links jump
   to that card on the dashboard (open, scrolled to the top). Then the
   research question and "Searched on" subquestions from
-  `research-record.json` under the page title (import script `--record`).
+  `research-record.json` under the page title (import script `--record`),
+  with the R* query statement (`rstar_query.md`, `--query`) above them;
+  its "R* Query" heading is an 18px h3 like the others (h2 24px, body 15px).
+  Checked `app/` is self-contained (fonts from Google Fonts kept).
 
 - Session 2 (2026-11-17): restyled to `new_dashboard_layout_2026-11-17-6.46am.png`
   — pale page, whole dashboard on a navy (#1F3244) panel, search on navy, and
@@ -153,6 +171,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Next steps
 
+0. Ask whether to publish session 3 (merge `develop` → `main`, push).
+
 1. Get answers to the open questions above and adjust filters / card content.
 2. When the user has more metadata, add it as JSON fields and show it in the
    panel (or the future dataset page).
@@ -160,8 +180,9 @@ was considered and set aside. Revisit when the dataset detail page is built.
 4. Plan the per-dataset detail page (tab view) and the "back to dashboard"
    path that restores state from the URL.
 5. Archive pages: add more pages/archives as the research comes in
-   (import script + `archives.json`); decide which `research-record.json`
-   fields to use (e.g. a ratings summary in the dropdown).
+   (import script + `archives.json`); decide which other
+   `research-record.json` fields to use (e.g. a ratings summary in the
+   dropdown).
 6. Consider showing endpoint `role` (e.g. a "Mirror" label) and using the
    dataset `id` in URLs instead of the card number (card numbers shift when
    a dataset is added or removed, which changes what `?open=` points to).
