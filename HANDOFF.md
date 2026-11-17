@@ -1,6 +1,6 @@
 # Handoff — Precipitation Workshop Dashboard
 
-_Last updated: 2026-11-17 (end of session 3)_
+_Last updated: 2026-11-17 (end of session 4)_
 
 ## What exists
 
@@ -72,7 +72,7 @@ site is on GitHub Pages via the Actions workflow, which publishes `app/` as-is. 
 needed (it can build one page per dataset from the CSV). Next.js static export
 was considered and set aside. Revisit when the dataset detail page is built.
 
-## Current state (after session 3)
+## Current state (after session 4)
 
 - 41 datasets render as cards (the user removed a duplicate "PRISM" row);
   click a card to open the detail panel, which ends with a "Data access
@@ -83,8 +83,9 @@ was considered and set aside. Revisit when the dataset detail page is built.
 - Search matches all words across every text field and the endpoint names/URLs.
 - Filters are multi-select (click to add/remove; "All datasets" clears the
   group). Within a group options are OR'd; the two groups are AND'd.
-- Look: navy dashboard panel on a #90A8BE page, grey #E3E8EC cards with a 4px
-  #235C70 rule, #DAE4EC hover/open header, white open panel, bright
+- Look: navy dashboard panel (max 1200px wide) on a #D5E3EF page, #E4EBF0
+  cards with a 4px #235C70 rule, #CAD8E3 hover/open header, #46606F card
+  label text, white open panel, bright
   data-source tags with #434343 text. All text passes WCAG AA; details in
   `notes/dashboard-design-notes.md`.
 - Search, filters and open cards are stored in the URL (`?q=&category=a,b&coverage=&open=`),
@@ -100,9 +101,10 @@ was considered and set aside. Revisit when the dataset detail page is built.
   or more pages per archive show as tabs (tested). Content indented 40px.
 - `app/` is self-contained; the only outside resource is Google Fonts (IBM
   Plex), which the user chose to keep.
-- Session 3's work is committed on `develop` but NOT yet merged to `main`
-  or pushed, so the live site doesn't have archive pages yet. Give the user
-  the publish command (Working preferences) when they want it live.
+- Everything through session 4 is merged to `main`, pushed and live
+  (checked on the live site 2026-11-17: new colors and the 8 NCEI archive
+  links are there). `main`, `develop` and both remotes were at `99f8f1e`
+  before the session-4 handoff commit.
 
 ## Open questions for the user
 
@@ -139,6 +141,15 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Session log
 
+- Session 4 (2026-11-17): new colors from the user — page #D5E3EF (tried
+  #C3DFF0 first), cards #E4EBF0, hover/open header #CAD8E3; card label
+  text darkened #4A6575 → #46606F to keep 4.5:1 on the new hover color.
+  The user published sessions 3 and 4 to GitHub Pages. Note: the page color
+  only shows on windows wider than 1200px (the navy panel fills narrower
+  ones); offered to add a light-blue margin around the panel, no answer yet.
+  The checkout was on `main` mid-session (the user switches to merge);
+  check the branch before committing.
+
 - Session 3 (2026-11-17): archive pages. Added `archive.html` for NOAA
   NCEI with the user's threat-assessment research (copied in by
   `scripts/import_archive_page.py`, "Saved in" paragraph and the two
@@ -171,7 +182,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Next steps
 
-0. Ask whether to publish session 3 (merge `develop` → `main`, push).
+0. Ask whether the user wants a light-blue margin around the navy
+   dashboard panel so the #D5E3EF page color shows on laptop-width windows.
 
 1. Get answers to the open questions above and adjust filters / card content.
 2. When the user has more metadata, add it as JSON fields and show it in the
