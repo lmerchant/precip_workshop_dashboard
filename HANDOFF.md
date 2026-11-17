@@ -1,6 +1,6 @@
 # Handoff — Precipitation Workshop Dashboard
 
-_Last updated: 2026-11-17 (end of session 2)_
+_Last updated: 2026-11-17 (session 3, in progress)_
 
 ## What exists
 
@@ -11,6 +11,11 @@ _Last updated: 2026-11-17 (end of session 2)_
     panel animation, focus styles, mobile tweaks
   - `app.js` — loads `data/datasets.json` (relative to `app/`), builds one
     card per dataset, search, filters, expand/collapse panels, state in URL
+  - `archive.html`, `archive.js` — the archive page
+    (`archive.html?id=noaa-ncei`), see "Archive pages" in the design notes
+  - `shared.js` (helpers for both pages), `markdown.js` (Markdown renderer)
+  - `data/archives.json` — archives that have pages, and their pages
+  - `content/archives/<id>/*.md` — archive page text (Markdown)
   - `data/datasets.json` — the dataset data (41 datasets), including each
     dataset's `access_endpoints` list. This is now the file to edit; format in
     `notes/dashboard-design-notes.md`.
@@ -32,6 +37,11 @@ _Last updated: 2026-11-17 (end of session 2)_
   and will add it as new JSON fields.
 - Current layout/color design: `my_docs/html_css_design/images/new_dashboard_layout_2026-11-17-6.46am.png`
 - Design decisions: `notes/dashboard-design-notes.md`
+- `scripts/import_archive_page.py` — copies a research answer into
+  `app/content/` and strips references to the research project's files.
+- Research results (user's, from another project):
+  `my_docs/about_data/rstar_query_results/archive_answers/...`. The user
+  will pick fields from each `research-record.json` later (not used yet).
 
 ## How to run
 
@@ -73,6 +83,12 @@ was considered and set aside. Revisit when the dataset detail page is built.
 - Search, filters and open cards are stored in the URL (`?q=&category=a,b&coverage=&open=`),
   which is the hook for restoring the dashboard after the future dataset page.
 
+- (Session 3) Each dataset panel links its archive to an archive page when
+  one exists ("NOAA NCEI — about this archive"). The NCEI page shows the
+  threat assessment from the user's research, a "Datasets in this archive"
+  list, and a back link that restores the dashboard state. More pages per
+  archive become tabs.
+
 ## Open questions for the user
 
 - Should categories come from new JSON fields (e.g. `data_source`,
@@ -108,6 +124,12 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Session log
 
+- Session 3 (2026-11-17): archive pages. Added `archive.html` for NOAA
+  NCEI with the user's threat-assessment research (copied in by
+  `scripts/import_archive_page.py`, "Saved in" paragraph and the two
+  research-file bullets in Gaps removed), linked from the 8 NCEI dataset
+  panels; tabs ready for more pages; data fetches no longer cached.
+
 - Session 2 (2026-11-17): restyled to `new_dashboard_layout_2026-11-17-6.46am.png`
   — pale page, whole dashboard on a navy (#1F3244) panel, search on navy, and
   filters + dataset index in one white panel (see "Layout and colors" in
@@ -133,6 +155,9 @@ was considered and set aside. Revisit when the dataset detail page is built.
 3. Set up Playwright (Firefox/WebKit) to check pages and accessibility.
 4. Plan the per-dataset detail page (tab view) and the "back to dashboard"
    path that restores state from the URL.
-5. Consider showing endpoint `role` (e.g. a "Mirror" label) and using the
+5. Archive pages: add more pages/archives as the research comes in
+   (import script + `archives.json`); decide which `research-record.json`
+   fields to use (e.g. a ratings summary in the dropdown).
+6. Consider showing endpoint `role` (e.g. a "Mirror" label) and using the
    dataset `id` in URLs instead of the card number (card numbers shift when
    a dataset is added or removed, which changes what `?open=` points to).

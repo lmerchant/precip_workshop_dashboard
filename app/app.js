@@ -6,7 +6,12 @@
  * back from a future dataset page) shows the dashboard as it was.
  */
 
-const DATA_PATH = "data/datasets.json";
+// DATA_PATH, ARCHIVES_PATH, escapeHtml and the archive helpers are in
+// shared.js, which index.html loads first.
+
+// Archives that have their own page (from data/archives.json). Filled in
+// by init(); stays empty if that file can't be loaded.
+let archives = [];
 
 // Field names in datasets.json, in one place so a renamed field is a
 // one-line change. Each dataset also has an "access_endpoints" list of
@@ -89,18 +94,31 @@ function shortPeriod(text) {
 
 /* ---------- Rendering ---------- */
 
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
 const pad3 = n => String(n).padStart(3, "0");
 
 // Link text for an endpoint: the address without "https://" or a trailing "/".
 const displayUrl = url => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+// The "Data archive(s)" value: each archive that has its own page is a
+// link to it; the others stay plain text. writeStateToUrl() keeps the
+// links' addresses up to date with the dashboard state.
+function archiveNamesHtml(text) {
+  const names = splitArchiveNames(text);
+  if (names.length === 0) return "Not stated";
+  return names.map(name => {
+    const archive = findArchive(archives, name);
+    if (!archive) return escapeHtml(name);
+    return `<a class="archive-link" data-archive="${escapeHtml(archive.id)}"
+         href="${escapeHtml(archiveHref(archive.id))}">${escapeHtml(name)} — about this archive</a>`;
+  }).join("; ");
+}
+
+// Address of an archive page, carrying the dashboard's current state so
+// its "Back to dashboard" link returns here as things were.
+function archiveHref(id) {
+  const back = dashboardQuery(location.search);
+  return `archive.html?id=${encodeURIComponent(id)}${back ? `&${back}` : ""}`;
+}
 
 function endpointsHtml(endpoints) {
   const e = escapeHtml;
@@ -131,7 +149,7 @@ function cardHtml(ds) {
   const metadata = METADATA_FIELDS.map(([label, col]) => `
     <div class="metadata-item">
       <dt>${e(label)}</dt>
-      <dd>${e(r[col] || "Not stated")}</dd>
+      <dd>${col === COL.archive ? archiveNamesHtml(r[col]) : e(r[col] || "Not stated")}</dd>
     </div>`).join("");
 
   return `
@@ -209,6 +227,9 @@ function writeStateToUrl() {
   if (state.open.size) p.set("open", [...state.open].sort((a, b) => a - b).join(","));
   const qs = p.toString();
   history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
+  document.querySelectorAll(".archive-link").forEach(a => {
+    a.href = archiveHref(a.dataset.archive);
+  });
 }
 
 /* ---------- Behaviour ---------- */
@@ -260,16 +281,18 @@ async function init() {
 
   let rows;
   try {
-    const res = await fetch(DATA_PATH);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    rows = (await res.json()).datasets;
+    rows = (await fetchJson(DATA_PATH)).datasets;
   } catch (err) {
-    list.innerHTML = `<p class="status-message">Could not load the dataset file
-      (<code>${escapeHtml(DATA_PATH)}</code>: ${escapeHtml(err.message)}).
-      Open this page through a local web server started from the <code>app</code> folder,
-      for example <code>python3 -m http.server 3000 --bind 127.0.0.1</code>,
-      then visit <code>http://127.0.0.1:3000/</code>.</p>`;
+    list.innerHTML = loadErrorHtml(DATA_PATH, err);
     return;
+  }
+
+  // Archive pages are extra: without archives.json the archive names
+  // just show as plain text.
+  try {
+    archives = (await fetchJson(ARCHIVES_PATH)).archives;
+  } catch {
+    archives = [];
   }
 
   const datasets = rows.map((row, i) => ({

@@ -1,0 +1,18 @@
+{
+  "archives": [
+    {
+      "id": "noaa-ncei",
+      "name": "NOAA NCEI",
+      "full_name": "NOAA National Centers for Environmental Information",
+      "data_archive_names": ["NOAA NCEI"],
+      "pages": [
+        {
+          "id": "threats",
+          "title": "Threat assessment",
+          "as_of": "2026-11-17",
+          "file": "content/archives/noaa-ncei/threats-2026-11-17.md"
+        }
+      ]
+    }
+  ]
+}

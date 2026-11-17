@@ -562,6 +562,19 @@ body {
 }
 
 
+/* 11c. ARCHIVE LINK (in the dataset panel) */
+
+.archive-link {
+  color: var(--link-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.archive-link:hover {
+  color: var(--link-hover);
+}
+
+
 /* 12. DIVIDERS */
 
 .section-divider {
@@ -581,6 +594,218 @@ body {
   font-size: 11px;
   letter-spacing: 1px;
   color: var(--on-navy-text);
+}
+
+
+/* 13b. ARCHIVE PAGE (archive.html) */
+
+.back-link {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.back-link:hover {
+  color: var(--header-text);
+}
+
+.archive-header :focus-visible {
+  outline-color: #FFFFFF;
+}
+
+.archive-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 24px 24px 0 40px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.archive-tabs[hidden] {
+  display: none;
+}
+
+.archive-tab {
+  background: var(--ice-blue);
+  border: 1px solid var(--ice-blue);
+  border-bottom: none;
+  border-radius: 0;
+  padding: 10px 16px;
+  color: var(--deep-ocean);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.archive-tab:hover {
+  border-color: var(--ocean-slate);
+}
+
+.archive-tab[aria-selected="true"] {
+  background: var(--deep-ocean);
+  border-color: var(--deep-ocean);
+  color: #FFFFFF;
+}
+
+/* Text rendered from the Markdown pages */
+.prose {
+  max-width: 860px;
+  padding: 32px 24px 40px 40px;
+  color: var(--body-text);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.page-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted-text);
+  margin: 0 0 12px;
+}
+
+.prose h2 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--deep-ocean);
+  margin: 0 0 20px;
+}
+
+.prose h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--deep-ocean);
+  margin: 36px 0 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--divider);
+}
+
+.prose h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--deep-ocean);
+  margin: 24px 0 8px;
+}
+
+.prose p {
+  margin: 0 0 14px;
+}
+
+.prose strong {
+  color: var(--heading-text);
+  font-weight: 600;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+
+.prose li {
+  margin-bottom: 8px;
+}
+
+.prose li > ul,
+.prose li > ol {
+  margin: 8px 0 0;
+}
+
+.prose a {
+  color: var(--link-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.prose a:hover {
+  color: var(--link-hover);
+}
+
+.prose code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  background: var(--panel-bg);
+  padding: 1px 5px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 0 0 20px;
+}
+
+.prose table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.prose th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted-text);
+  text-align: left;
+  padding: 0 14px 8px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.prose td {
+  padding: 10px 14px 10px 0;
+  border-bottom: 1px solid var(--divider);
+  vertical-align: top;
+  color: var(--deep-ocean);
+}
+
+.archive-datasets {
+  background: var(--dataset-card-bg);
+  border-top: 4px solid var(--dataset-card-rule);
+  padding: 28px 24px 32px 40px;
+}
+
+.archive-datasets h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--deep-ocean);
+  margin: 0 0 14px;
+}
+
+.archive-dataset-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.archive-dataset-list a {
+  color: var(--link-text);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.archive-dataset-list a:hover {
+  color: var(--link-hover);
+}
+
+.archive-dataset-archives {
+  display: block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--dataset-label-text);
 }
 
 
@@ -644,6 +869,18 @@ body {
 
   .filter-section {
     padding: 16px;
+  }
+
+  .archive-tabs {
+    padding: 16px 16px 0;
+  }
+
+  .prose {
+    padding: 24px 16px 32px;
+  }
+
+  .archive-datasets {
+    padding: 24px 16px;
   }
 }
 

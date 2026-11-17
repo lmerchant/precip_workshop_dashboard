@@ -107,3 +107,46 @@ Colors sampled from the image; all live as variables at the top of `app/styles.c
 - Data-source tags (from the user): Gauge `#79D49B`, Satellite `#B0ECFF`,
   Reanalysis `#C6B9FB`, Merged `#FFD28A`, all with text `#434343`
   (`--tag-category-text`; 5.5–7.7:1).
+
+## Archive pages (2026-11-17, session 3)
+
+A page about a data archive (not a dataset), shared by every dataset held
+there. First one: NOAA NCEI, from the user's research answer
+`answer_A1_Rstar_query_chatgpt-noaa_ncei.md` (in `my_docs/about_data/rstar_query_results/`).
+
+- **Files**
+  - `app/data/archives.json` lists the archives that have pages:
+    `{ "archives": [ { "id", "name", "full_name", "data_archive_names": [...],
+    "pages": [ { "id", "title", "as_of", "file" } ] } ] }`.
+    `data_archive_names` are the names as written in a dataset's
+    `data_archive` text (split on ";").
+  - `app/content/archives/<archive id>/<page>.md`: the page text, kept as
+    Markdown and rendered in the browser by `app/markdown.js` (a small
+    renderer, written here, no library: headings, paragraphs, bold, code,
+    links, nested lists, pipe tables; escapes all text first).
+  - `app/archive.html` + `app/archive.js`: one page for every archive,
+    `archive.html?id=noaa-ncei[&page=threats]`.
+  - `app/shared.js`: helpers both pages use (paths, escapeHtml, fetchJson,
+    archive matching, `dashboardQuery`). Loaded before app.js / archive.js.
+  - `scripts/import_archive_page.py SOURCE.md DEST.md` copies a research
+    answer in and removes the parts that point to the research project's own
+    files (the closing "Saved in ..." paragraph and the "Pages to check by
+    hand" / "Sites to trust" items). Then add the page to `archives.json`.
+- **Dropdown link**: in the metadata grid, each archive in "Data archive(s)"
+  that has a page is a link "NOAA NCEI — about this archive"; the others stay
+  plain text. 8 datasets link to NCEI (6 NCEI only, 2 with a second archive).
+- **Back to the dashboard**: the link carries the dashboard's `q`,
+  `category`, `coverage` and `open` parameters (kept up to date as the user
+  searches or opens cards); the archive page's "← Back to dashboard" sends
+  them back, so the dashboard looks as it did.
+- **Archive page layout**: same navy header as the dashboard (archive name,
+  full name, dataset and page counts); white panel with "As of <date>" and
+  the Markdown text (its `#` title becomes the page's `<h2>`, so the
+  archive name is the only `<h1>`); a grey "Datasets in this archive" list
+  linking to `index.html?open=N`. Wide tables scroll sideways inside their
+  own box on phones.
+- **More pages**: with two or more pages in `pages`, tabs appear above the
+  text (WAI-ARIA tabs: arrow keys, Home/End); the chosen tab is in the URL
+  as `&page=`. Tested with a temporary second page.
+- Data and page files are fetched with `cache: "no-cache"`, so an edited
+  file shows after a normal reload (CSS/JS still need Cmd+Shift+R).
