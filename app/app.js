@@ -153,7 +153,7 @@ function cardHtml(ds) {
     </div>`).join("");
 
   return `
-  <article class="dataset-card" data-number="${ds.number}">
+  <article class="dataset-card" id="dataset-${ds.number}" data-number="${ds.number}">
     <div class="dataset-header">
       <div class="dataset-number">Dataset ${pad3(ds.number)} / ${e(ds.category.label)}</div>
       <h3 class="dataset-title">
@@ -276,6 +276,21 @@ function searchTextOf(row) {
   return [...fields, ...endpoints].join(" ").toLowerCase();
 }
 
+// Scroll to card number n and put keyboard focus on its title. If the
+// search or filters hide that card, they are cleared first.
+function jumpToCard(datasets, n, searchInput) {
+  const target = datasets.find(ds => ds.number === n);
+  if (!target) return;
+  if (target.card.hidden) {
+    state.search = "";
+    searchInput.value = "";
+    FILTER_GROUPS.forEach(g => state[g].clear());
+    applyFilters(datasets);
+  }
+  target.card.scrollIntoView({ block: "start" });
+  target.card.querySelector(".dataset-toggle").focus({ preventScroll: true });
+}
+
 async function init() {
   const list = document.getElementById("datasetList");
 
@@ -321,14 +336,18 @@ async function init() {
     ds.card = list.querySelector(`[data-number="${ds.number}"]`);
   });
 
-  // Restore state from the URL.
+  // Restore state from the URL. A "#dataset-N" hash (used by the links on
+  // the archive page) scrolls to that card; read it now, because
+  // writeStateToUrl() rewrites the address without it.
   readStateFromUrl();
+  const jumpTo = Number((location.hash.match(/^#dataset-(\d+)$/) || [])[1]);
   const searchInput = document.getElementById("searchInput");
   searchInput.value = state.search;
   datasets.forEach(ds => {
     if (state.open.has(ds.number)) setExpanded(ds.card, true);
   });
   applyFilters(datasets);
+  jumpToCard(datasets, jumpTo, searchInput);
 
   // Search
   searchInput.addEventListener("input", () => {

@@ -142,9 +142,15 @@ there. First one: NOAA NCEI, from the user's research answer
 - **Archive page layout**: same navy header as the dashboard (archive name,
   full name, dataset and page counts); white panel with "As of <date>" and
   the Markdown text (its `#` title becomes the page's `<h2>`, so the
-  archive name is the only `<h1>`); a grey "Datasets in this archive" list
-  linking to `index.html?open=N`. Wide tables scroll sideways inside their
-  own box on phones.
+  archive name is the only `<h1>`); a grey "Datasets in this archive" list.
+  Wide tables scroll sideways inside their own box on phones. Content is
+  indented 40px on desktop (user's request), 16px on phones.
+- **Dataset links on the archive page** go to
+  `index.html?<saved dashboard state, with N added to open>#dataset-N`. The
+  dashboard opens that card, scrolls it to the top of the screen and puts
+  focus on its title (`jumpToCard` in app.js). If the saved search or
+  filters would hide the card, they are cleared first. Each card has
+  `id="dataset-N"` (N = card number).
 - **More pages**: with two or more pages in `pages`, tabs appear above the
   text (WAI-ARIA tabs: arrow keys, Home/End); the chosen tab is in the URL
   as `&page=`. Tested with a temporary second page.

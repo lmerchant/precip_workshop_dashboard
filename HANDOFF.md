@@ -129,6 +129,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
   `scripts/import_archive_page.py`, "Saved in" paragraph and the two
   research-file bullets in Gaps removed), linked from the 8 NCEI dataset
   panels; tabs ready for more pages; data fetches no longer cached.
+  Then: 40px left indent on the archive page, and its dataset links jump
+  to that card on the dashboard (open, scrolled to the top).
 
 - Session 2 (2026-11-17): restyled to `new_dashboard_layout_2026-11-17-6.46am.png`
   — pale page, whole dashboard on a navy (#1F3244) panel, search on navy, and

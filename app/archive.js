@@ -97,6 +97,17 @@ function buildTabs(archive, selected) {
 
 /* ---------- Datasets in this archive ---------- */
 
+// Link to one dataset on the dashboard: the dashboard comes back as it
+// was, with this dataset's card also open, and scrolls to that card
+// (see jumpToCard in app.js).
+function datasetHref(number) {
+  const p = new URLSearchParams(backQuery);
+  const open = new Set((p.get("open") || "").split(",").filter(Boolean));
+  open.add(String(number));
+  p.set("open", [...open].sort((a, b) => a - b).join(","));
+  return `index.html?${p}#dataset-${number}`;
+}
+
 function showDatasets(archive, rows, archives) {
   const matches = rows
     .map((row, i) => ({ row, number: i + 1 }))   // number = card number on the dashboard
@@ -108,7 +119,7 @@ function showDatasets(archive, rows, archives) {
   if (matches.length === 0) return;
 
   $("archiveDatasetList").innerHTML = matches.map(({ row, number }) => `
-    <li><a href="index.html?open=${number}">${escapeHtml(row.name)}</a>
+    <li><a href="${escapeHtml(datasetHref(number))}">${escapeHtml(row.name)}</a>
       <span class="archive-dataset-archives">${escapeHtml(row.data_archive)}</span></li>`).join("");
   $("archiveDatasets").hidden = false;
 }
