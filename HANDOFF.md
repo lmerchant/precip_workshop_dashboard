@@ -1,6 +1,6 @@
 # Handoff — Precipitation Workshop Dashboard
 
-_Last updated: 2026-11-17_
+_Last updated: 2026-11-17 (end of session 2)_
 
 ## What exists
 
@@ -87,10 +87,14 @@ was considered and set aside. Revisit when the dataset detail page is built.
   and push (`git switch main && git merge --ff-only develop && git push
   origin main develop && git switch develop`). The user has done the merge and
   push themselves so far; ask before pushing.
+- In session 2, `git merge` and `git rm` from Claude's Bash were denied.
+  Give the user the command instead, and use `mv`/`trash` plus `git add -A`
+  to untrack files. The user also commits on `main` directly at times (e.g.
+  data edits), so check `git log develop..main` at the start of a session
+  and have the user fast-forward `develop` if it's behind.
 - When the user pastes CSS values, apply them as variables at the top of
   `app/styles.css`, and adjust text colors if needed to pass WCAG AA (the
   user has said that's fine).
-
 - Put everything the user views in `app/`; they open it in their own browser
   (no artifacts). After each big change, give them the server command from
   CLAUDE.md ("Viewing the dashboard").
@@ -109,16 +113,19 @@ was considered and set aside. Revisit when the dataset detail page is built.
   filters + dataset index in one white panel (see "Layout and colors" in
   `notes/dashboard-design-notes.md`). Then the user's own card colors
   (#90A8BE page, #E3E8EC cards, #DAE4EC hover/open) and bright tag colors;
-  multi-select filters; GitHub Pages workflow — site is live. The user once
-  saw a stale stylesheet: after CSS/JS changes, remind them to hard-reload
-  (Cmd+Shift+R).
+  multi-select filters; GitHub Pages workflow — site is live. Renamed
+  `docs/` → `my_docs/` (untracked; old commits keep the files, user is fine
+  with that). Switched the data from CSV to `app/data/datasets.json` and
+  added a "Data access endpoints" table to each panel, using the links in
+  `my_docs/about_data/Data archives by dataset.md`; all merged to `main`,
+  pushed and live. The user once saw a stale stylesheet: after CSS/JS
+  changes, remind them to hard-reload (Cmd+Shift+R).
 - Session 1 (2026-11-17): built the first dashboard from the design files and
   the CSV; moved the data into `app/data/`; decided on plain HTML now with
   GitHub Pages later; added the skills and viewing sections to CLAUDE.md;
   first commits on `develop`.
 
 ## Next steps
-
 
 1. Get answers to the open questions above and adjust filters / card content.
 2. When the user has more metadata, add it as JSON fields and show it in the
@@ -127,4 +134,5 @@ was considered and set aside. Revisit when the dataset detail page is built.
 4. Plan the per-dataset detail page (tab view) and the "back to dashboard"
    path that restores state from the URL.
 5. Consider showing endpoint `role` (e.g. a "Mirror" label) and using the
-   dataset `id` in URLs instead of the card number.
+   dataset `id` in URLs instead of the card number (card numbers shift when
+   a dataset is added or removed, which changes what `?open=` points to).
