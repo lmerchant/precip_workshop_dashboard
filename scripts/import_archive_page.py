@@ -8,20 +8,30 @@ drops those parts:
   - list items that point to the research project's own files
     (see DROP_ITEM_PREFIXES)
 
+With --record, it also reads the answer's research-record.json and writes
+the fields the page shows to a small JSON file next to DEST (same name,
+.json ending):
+
+  { "question": <the record's "question">,
+    "searched_on": [<each "question" in the record's "subquestions">] }
+
 Usage (from the project folder):
 
-    python3 scripts/import_archive_page.py SOURCE.md DEST.md
+    python3 scripts/import_archive_page.py SOURCE.md DEST.md [--record research-record.json]
 
 Example:
 
     python3 scripts/import_archive_page.py \
       my_docs/about_data/rstar_query_results/archive_answers/A1_Rstar_query/2026-11-17_noaa-ncei-threats/answer_A1_Rstar_query_chatgpt-noaa_ncei.md \
-      app/content/archives/noaa-ncei/threats-2026-11-17.md
+      app/content/archives/noaa-ncei/threats-2026-11-17.md \
+      --record my_docs/about_data/rstar_query_results/archive_answers/A1_Rstar_query/2026-11-17_noaa-ncei-threats/research-record.json
 
 After a new page is copied in, add it to the archive's "pages" list in
-app/data/archives.json.
+app/data/archives.json ("file" for the .md, "record" for the .json).
 """
 
+import argparse
+import json
 import sys
 from pathlib import Path
 
@@ -46,17 +56,32 @@ def clean(text: str) -> str:
     return "\n".join(kept).rstrip() + "\n"
 
 
-def main(argv: list[str]) -> int:
-    if len(argv) != 3:
-        print(__doc__)
-        return 2
-    source, dest = Path(argv[1]), Path(argv[2])
-    cleaned = clean(source.read_text(encoding="utf-8"))
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(cleaned, encoding="utf-8")
-    print(f"Wrote {dest} ({len(cleaned.splitlines())} lines)")
+def record_fields(record: dict) -> dict:
+    return {
+        "question": record["question"],
+        "searched_on": [s["question"] for s in record.get("subquestions", [])],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    parser.add_argument("source", type=Path, help="research answer (.md)")
+    parser.add_argument("dest", type=Path, help="where to write it under app/content/")
+    parser.add_argument("--record", type=Path, help="the answer's research-record.json")
+    args = parser.parse_args()
+
+    cleaned = clean(args.source.read_text(encoding="utf-8"))
+    args.dest.parent.mkdir(parents=True, exist_ok=True)
+    args.dest.write_text(cleaned, encoding="utf-8")
+    print(f"Wrote {args.dest} ({len(cleaned.splitlines())} lines)")
+
+    if args.record:
+        fields = record_fields(json.loads(args.record.read_text(encoding="utf-8")))
+        out = args.dest.with_suffix(".json")
+        out.write_text(json.dumps(fields, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(f"Wrote {out} (question + {len(fields['searched_on'])} searched-on items)")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+    sys.exit(main())

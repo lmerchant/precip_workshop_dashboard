@@ -47,7 +47,35 @@ async function showPage(archive, page) {
     : "";
   // renderMarkdown escapes the file's text before adding markup.
   panel.innerHTML = `<article class="prose">${date}${renderMarkdown(text, { headingOffset: 1 })}</article>`;
+
+  // The research question and what was searched go right under the
+  // page's title (its first <h2>).
+  const scope = await researchScopeHtml(page);
+  const title = panel.querySelector(".prose h2");
+  if (scope && title) title.insertAdjacentHTML("afterend", scope);
   panel.removeAttribute("aria-busy");
+}
+
+// From the page's "record" file (written by scripts/import_archive_page.py
+// from the research-record.json): the question asked and the
+// subquestions searched. Returns "" if the page has no record or it
+// can't be loaded.
+async function researchScopeHtml(page) {
+  if (!page.record) return "";
+  let rec;
+  try {
+    rec = await fetchJson(page.record);
+  } catch {
+    return "";
+  }
+  const question = rec.question
+    ? `<p class="research-question"><strong>Question:</strong> ${escapeHtml(rec.question)}</p>`
+    : "";
+  const items = rec.searched_on || [];
+  const searched = items.length ? `
+    <h3 class="searched-on-heading">Searched on</h3>
+    <ul class="searched-on">${items.map(q => `<li>${escapeHtml(q)}</li>`).join("")}</ul>` : "";
+  return question || searched ? `<div class="research-scope">${question}${searched}</div>` : "";
 }
 
 // Tabs follow the WAI-ARIA tabs pattern: the selected tab is the only one

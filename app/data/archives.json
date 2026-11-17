@@ -10,7 +10,8 @@
           "id": "threats",
           "title": "Threat assessment",
           "as_of": "2026-11-17",
-          "file": "content/archives/noaa-ncei/threats-2026-11-17.md"
+          "file": "content/archives/noaa-ncei/threats-2026-11-17.md",
+          "record": "content/archives/noaa-ncei/threats-2026-11-17.json"
         }
       ]
     }

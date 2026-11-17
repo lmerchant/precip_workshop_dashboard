@@ -699,6 +699,28 @@ body {
   margin: 0 0 14px;
 }
 
+/* Research question and "Searched on" list (from the page's record file) */
+.research-scope {
+  margin: 0 0 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.prose h3.searched-on-heading {
+  font-size: 15px;
+  margin: 16px 0 8px;
+  padding-top: 0;
+  border-top: none;
+}
+
+.searched-on {
+  margin-bottom: 0;
+}
+
+.searched-on li {
+  margin-bottom: 4px;
+}
+
 .prose strong {
   color: var(--heading-text);
   font-weight: 600;

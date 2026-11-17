@@ -131,7 +131,13 @@ there. First one: NOAA NCEI, from the user's research answer
   - `scripts/import_archive_page.py SOURCE.md DEST.md` copies a research
     answer in and removes the parts that point to the research project's own
     files (the closing "Saved in ..." paragraph and the "Pages to check by
-    hand" / "Sites to trust" items). Then add the page to `archives.json`.
+    hand" / "Sites to trust" items). With `--record research-record.json`
+    it also writes `<page>.json` next to the .md with
+    `{ "question", "searched_on": [each subquestion's "question"] }`.
+    Then add the page to `archives.json` (`file` = .md, `record` = .json).
+- **Research scope**: when a page has a `record`, the page shows
+  "**Question:** <question>" and a "Searched on" list right under the
+  page's title (its first `<h2>`), above the direct answer.
 - **Dropdown link**: in the metadata grid, each archive in "Data archive(s)"
   that has a page is a link "NOAA NCEI — about this archive"; the others stay
   plain text. 8 datasets link to NCEI (6 NCEI only, 2 with a second archive).

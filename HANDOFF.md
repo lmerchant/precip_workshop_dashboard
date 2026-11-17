@@ -130,7 +130,9 @@ was considered and set aside. Revisit when the dataset detail page is built.
   research-file bullets in Gaps removed), linked from the 8 NCEI dataset
   panels; tabs ready for more pages; data fetches no longer cached.
   Then: 40px left indent on the archive page, and its dataset links jump
-  to that card on the dashboard (open, scrolled to the top).
+  to that card on the dashboard (open, scrolled to the top). Then the
+  research question and "Searched on" subquestions from
+  `research-record.json` under the page title (import script `--record`).
 
 - Session 2 (2026-11-17): restyled to `new_dashboard_layout_2026-11-17-6.46am.png`
   — pale page, whole dashboard on a navy (#1F3244) panel, search on navy, and
