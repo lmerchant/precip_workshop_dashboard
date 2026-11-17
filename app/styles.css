@@ -13,14 +13,14 @@
   --mist-blue: #9AB7C1;
   --ice-blue: #E3EDF0;
 
-  --page-bg: #90A8BE;       /* blue-grey page around the navy dashboard */
+  --page-bg: #D5E3EF;       /* light blue page around the navy dashboard */
 
   /* Dataset cards */
-  --dataset-card-bg: #E3E8EC;
-  --dataset-card-hover: #DAE4EC;   /* hover and open (selected) card header */
+  --dataset-card-bg: #E4EBF0;
+  --dataset-card-hover: #CAD8E3;   /* hover and open (selected) card header */
   --dataset-card-rule: #235C70;    /* 4px line under each card */
   --dataset-details-bg: #FFFFFF;
-  --dataset-label-text: #4A6575;   /* steel-blue darkened to pass AA on the card colors */
+  --dataset-label-text: #46606F;   /* steel-blue darkened to pass AA on the card colors (4.57:1 on hover) */
   --card-bg: #FFFFFF;
   --panel-bg: #EDF3F5;
 

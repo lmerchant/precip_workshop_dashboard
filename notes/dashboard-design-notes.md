@@ -95,13 +95,14 @@ Colors sampled from the image; all live as variables at the top of `app/styles.c
 
 ### Card colors (2026-11-17, from the user)
 
-- Page background changed to `#90A8BE` (`--page-bg`).
-- Card `#E3E8EC` (`--dataset-card-bg`) with a 4px `#235C70` line under each
+- Page background `#D5E3EF` (`--page-bg`; was `#90A8BE` until session 4).
+- Card `#E4EBF0` (`--dataset-card-bg`; was `#E3E8EC`) with a 4px `#235C70` line under each
   card (`--dataset-card-rule`); the last card has no line.
-- Card header on hover and while open: `#DAE4EC` (`--dataset-card-hover`).
+- Card header on hover and while open: `#CAD8E3` (`--dataset-card-hover`; was `#DAE4EC`).
 - Open panel background white (`--dataset-details-bg`).
 - Contrast fixes for the grey cards: card label line ("DATASET 008 /
-  REANALYSIS") uses `--dataset-label-text` `#4A6575` (steel-blue was 3.5:1);
+  REANALYSIS") uses `--dataset-label-text` `#46606F` (steel-blue was 3.5:1; darkened from
+  `#4A6575` in session 4 to pass 4.5:1 on the darker `#CAD8E3` hover);
   the plain tags (coverage, period) are white so they don't vanish into the
   card; `--muted-text` is `#5C7A8C` (4.55:1 on white).
 - Data-source tags (from the user): Gauge `#79D49B`, Satellite `#B0ECFF`,
