@@ -40,7 +40,7 @@ CONUS 5, North America 2, Global land 11, Quasi-global 9, Global 15.
 - URL: comma-separated lists, `?category=gauge,satellite&coverage=conus`.
   `FILTER_GROUPS` in app.js lists the groups.
 
-## Differences from the design HTML in docs/
+## Differences from the design HTML in my_docs/
 
 - The design HTML and CSS used different class names; the app uses the CSS's names.
 - Card header is not a `<button>` wrapping headings (invalid HTML); the title is
@@ -48,7 +48,7 @@ CONUS 5, North America 2, Global land 11, Quasi-global 9, Global 15.
 - Filter buttons and counts are generated from the data.
 - Panel opens with a grid-rows animation; respects reduced motion.
 
-## Layout and colors (2026-11-17, from docs/html_css_design/images/new_dashboard_layout_2026-11-17-6.46am.png)
+## Layout and colors (2026-11-17, from my_docs/html_css_design/images/new_dashboard_layout_2026-11-17-6.46am.png)
 
 Colors sampled from the image; all live as variables at the top of `app/styles.css`.
 

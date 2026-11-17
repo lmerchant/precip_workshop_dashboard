@@ -7,7 +7,7 @@ _Last updated: 2026-11-17_
 - `app/` — the dashboard (plain HTML/CSS/JS, no build step); everything the
   site needs lives here, so `app/` is the folder to serve or publish
   - `index.html` — page shell: header, search, filter groups, dataset list
-  - `styles.css` — based on `docs/html_css_design/styles.css`, plus tag colors,
+  - `styles.css` — based on `my_docs/html_css_design/styles.css`, plus tag colors,
     panel animation, focus styles, mobile tweaks
   - `app.js` — loads `data/precipitation_workshop_datasets.csv` (relative to
     `app/`), builds one card per row, search, filters, expand/collapse panels,
@@ -21,12 +21,15 @@ _Last updated: 2026-11-17_
   to GitHub Actions). The user links it from their own GitHub Pages home page.
 - GitHub repo: https://github.com/lmerchant/precip_workshop_dashboard
   (remote `origin`)
-- Design references (user's): `docs/html_css_design/` (HTML, CSS, images)
-- Data background (user's): `docs/about_data/Data archives by dataset.md`
+- `my_docs/` — the user's own reference files, kept local only: renamed from
+  `docs/` and added to `.gitignore` on 2026-11-17 (earlier commits still hold
+  the old `docs/` files in git history).
+- Design references (user's): `my_docs/html_css_design/` (HTML, CSS, images)
+- Data background (user's): `my_docs/about_data/Data archives by dataset.md`
   — a start on per-dataset metadata (archive name + dataset record link).
   The user is still gathering more metadata and will ask how to add it to
   the dashboard; don't wire it in before then.
-- Current layout/color design: `docs/html_css_design/images/new_dashboard_layout_2026-11-17-6.46am.png`
+- Current layout/color design: `my_docs/html_css_design/images/new_dashboard_layout_2026-11-17-6.46am.png`
 - Design decisions: `notes/dashboard-design-notes.md`
 
 ## How to run
@@ -112,10 +115,10 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 1. Get answers to the open questions above and adjust filters / card content.
 2. When the user has more metadata, plan how to add it (archive names and
-   dataset record links from `docs/about_data/` would fit the panel).
+   dataset record links from `my_docs/about_data/` would fit the panel).
 3. Set up Playwright (Firefox/WebKit) to check pages and accessibility.
 4. Plan the per-dataset detail page (tab view) and the "back to dashboard"
    path that restores state from the URL.
-5. Consider adding the "Data archives" links (docs/about_data) once the user
+5. Consider adding the "Data archives" links (my_docs/about_data) once the user
    confirms the metadata format; each publish is a merge of `develop` into
    `main`.

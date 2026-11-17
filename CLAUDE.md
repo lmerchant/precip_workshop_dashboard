@@ -14,7 +14,7 @@ Before you compact a session and at the end of a session, update a HANDOFF.md fi
 
 ## File locations
 
-For all documents you create for the project such as plans or memory notes, store them in the @notes folder. I will put relevant files of mine in the @docs folder. Data for the dashboard is located in the @app/data folder.
+For all documents you create for the project such as plans or memory notes, store them in the @notes folder. I will put relevant files of mine in the @my_docs folder, which is kept out of the git repo (listed in .gitignore). Data for the dashboard is located in the @app/data folder.
 
 ## At the end of a session
 
