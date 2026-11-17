@@ -7,41 +7,59 @@
 
 :root {
   --navy: #0B1620;
-  --deep-ocean: #183346;
+  --deep-ocean: #1F3244;     /* header, headings, active filters */
   --ocean-slate: #2A5367;
-  --steel-blue: #537B8E;
+  --steel-blue: #5C7A8C;
   --mist-blue: #9AB7C1;
   --ice-blue: #E3EDF0;
 
-  --page-bg: #E3EDF0;
+  --page-bg: #90A8BE;       /* blue-grey page around the navy dashboard */
+
+  /* Dataset cards */
+  --dataset-card-bg: #E3E8EC;
+  --dataset-card-hover: #DAE4EC;   /* hover and open (selected) card header */
+  --dataset-card-rule: #235C70;    /* 4px line under each card */
+  --dataset-details-bg: #FFFFFF;
+  --dataset-label-text: #4A6575;   /* steel-blue darkened to pass AA on the card colors */
   --card-bg: #FFFFFF;
   --panel-bg: #EDF3F5;
 
   --heading-text: #183346;
   --body-text: #405B68;
-  --muted-text: #637C88;
+  --muted-text: #5C7A8C;     /* 4.55:1 on white (was #637C88, 4.4:1) */
 
   --divider: #D5E0E4;
+
+  /* Header text on the navy band */
+  --header-label: #A0B6C0;
+  --header-text: #C8D6DE;
+  --header-rule: #5C7A8C;
+
+  /* Footer text on the navy dashboard background */
+  --on-navy-text: #A0B6C0;
 
   --tag-blue-bg: #D5E5EA;
   --tag-blue-text: #315D76;
 
-  --tag-slate-bg: #E3EDF0;
+  --tag-slate-bg: #FFFFFF;    /* white so tags stand out on the grey cards */
   --tag-slate-text: #405B68;
 
-  --tag-neutral-bg: #EDF1F2;
+  --tag-neutral-bg: #FFFFFF;
   --tag-neutral-text: #405B68;
 
   /* Category tag colors (one per data-source type) */
-  --tag-gauge-bg: #DDEDE3;
-  --tag-gauge-text: #2F6446;
-  --tag-satellite-bg: #D5E5EA;
-  --tag-satellite-text: #315D76;
-  --tag-reanalysis-bg: #E4E1F0;
-  --tag-reanalysis-text: #4D4580;
-  --tag-merged-bg: #F2E6D3;
-  --tag-merged-text: #7A5422;
-  --tag-cdr-bg: #183346;
+  /* Bright backgrounds with one dark text color; #434343 is
+     5.5:1 or better on each (WCAG AA) */
+  --tag-category-text: #434343;
+  --tag-gauge-bg: #79D49B;
+  --tag-gauge-text: var(--tag-category-text);
+  --tag-satellite-bg: #B0ECFF;
+  --tag-satellite-text: var(--tag-category-text);
+  --tag-reanalysis-bg: #C6B9FB;
+  --tag-reanalysis-text: var(--tag-category-text);
+  --tag-merged-bg: #FFD28A;
+  --tag-merged-text: var(--tag-category-text);
+  --tag-cdr-bg: #1F3244;
   --tag-cdr-text: #FFFFFF;
 
   --focus-ring: #2A5367;
@@ -62,7 +80,8 @@ body {
 .dashboard {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px;
+  padding: 0 32px 32px;
+  background: var(--deep-ocean);   /* the whole dashboard sits on navy */
 }
 
 .visually-hidden {
@@ -85,8 +104,7 @@ body {
 .dashboard-header {
   background: var(--deep-ocean);
   color: #FFFFFF;
-  padding: 32px;
-  margin-bottom: 24px;
+  padding: 72px 32px 56px;
 }
 
 .header-top {
@@ -102,12 +120,12 @@ body {
   font-weight: 500;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--mist-blue);
+  color: var(--header-label);
 }
 
 .dashboard-title {
   font-size: 36px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.15;
   color: #FFFFFF;
   margin: 0 0 12px;
@@ -115,14 +133,14 @@ body {
 
 .dashboard-description {
   font-size: 15px;
-  color: #C4D7DF;
+  color: var(--header-text);
   max-width: 650px;
   margin: 0;
 }
 
 .header-divider {
   height: 1px;
-  background: var(--steel-blue);
+  background: var(--header-rule);
   margin: 24px 0 16px;
 }
 
@@ -130,7 +148,7 @@ body {
   display: flex;
   justify-content: space-between;
   gap: 16px;
-  color: #C4D7DF;
+  color: var(--header-text);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   letter-spacing: 0.5px;
@@ -182,10 +200,13 @@ body {
 
 /* 5. FILTER SECTION */
 
+/* One white panel holds the filters and the dataset index */
+.content-panel {
+  background: var(--card-bg);
+}
+
 .filter-section {
-  background: #FFFFFF;
-  padding: 20px 24px;
-  margin-bottom: 28px;
+  padding: 24px 24px 8px;
   display: grid;
   gap: 18px;
 }
@@ -245,12 +266,13 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 12px;
+  gap: 16px;
+  padding: 40px 24px 16px;
 }
 
 .dataset-index-heading h2 {
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--deep-ocean);
   margin: 0;
 }
@@ -258,6 +280,8 @@ body {
 .dataset-count {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   color: var(--steel-blue);
 }
 
@@ -278,8 +302,8 @@ body {
 /* 7. DATASET CARD */
 
 .dataset-card {
-  background: var(--card-bg);
-  border-bottom: 1px solid var(--divider);
+  background: var(--dataset-card-bg);
+  border-bottom: 4px solid var(--dataset-card-rule);
 }
 
 .dataset-card:last-child {
@@ -293,8 +317,9 @@ body {
   padding: 22px 24px;
 }
 
-.dataset-header:hover {
-  background: #F7F9FA;
+.dataset-header:hover,
+.dataset-card.expanded .dataset-header {
+  background: var(--dataset-card-hover);
 }
 
 .dataset-number {
@@ -303,7 +328,7 @@ body {
   font-weight: 500;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: var(--steel-blue);
+  color: var(--dataset-label-text);
   margin-bottom: 8px;
 }
 
@@ -413,7 +438,7 @@ body {
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows 0.25s ease;
-  background: var(--panel-bg);
+  background: var(--dataset-details-bg);
 }
 
 .dataset-card.expanded .dataset-details {
@@ -503,7 +528,7 @@ body {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;
   letter-spacing: 1px;
-  color: var(--steel-blue);
+  color: var(--on-navy-text);
 }
 
 
@@ -517,11 +542,15 @@ body {
 
 @media (max-width: 700px) {
   .dashboard {
-    padding: 16px;
+    padding: 0 16px 16px;
   }
 
   .dashboard-header {
-    padding: 24px 20px;
+    padding: 32px 4px 32px;
+  }
+
+  .dataset-index-heading {
+    padding: 28px 16px 8px;
   }
 
   .dashboard-title {

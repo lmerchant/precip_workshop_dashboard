@@ -195,21 +195,26 @@ function filterButtonsHtml(groupName, options, datasets) {
 
 /* ---------- State (kept in the URL) ---------- */
 
-const state = { search: "", category: "all", coverage: "all", open: new Set() };
+// Each filter group holds a set of selected option ids; an empty set
+// means "All datasets". Options in one group combine with OR, and the
+// two groups combine with AND.
+const FILTER_GROUPS = ["category", "coverage"];
+
+const state = { search: "", category: new Set(), coverage: new Set(), open: new Set() };
+
+const listParam = value => (value || "").split(",").filter(Boolean);
 
 function readStateFromUrl() {
   const p = new URLSearchParams(location.search);
   state.search = p.get("q") || "";
-  state.category = p.get("category") || "all";
-  state.coverage = p.get("coverage") || "all";
-  state.open = new Set((p.get("open") || "").split(",").filter(Boolean).map(Number));
+  FILTER_GROUPS.forEach(g => { state[g] = new Set(listParam(p.get(g))); });
+  state.open = new Set(listParam(p.get("open")).map(Number));
 }
 
 function writeStateToUrl() {
   const p = new URLSearchParams();
   if (state.search) p.set("q", state.search);
-  if (state.category !== "all") p.set("category", state.category);
-  if (state.coverage !== "all") p.set("coverage", state.coverage);
+  FILTER_GROUPS.forEach(g => { if (state[g].size) p.set(g, [...state[g]].join(",")); });
   if (state.open.size) p.set("open", [...state.open].sort((a, b) => a - b).join(","));
   const qs = p.toString();
   history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
@@ -223,8 +228,7 @@ function applyFilters(datasets) {
 
   datasets.forEach(ds => {
     const visible =
-      (state.category === "all" || ds.category.id === state.category) &&
-      (state.coverage === "all" || ds.coverage.id === state.coverage) &&
+      FILTER_GROUPS.every(g => state[g].size === 0 || state[g].has(ds[g].id)) &&
       terms.every(t => ds.searchText.includes(t));
     ds.card.hidden = !visible;
     if (visible) shown++;
@@ -235,7 +239,11 @@ function applyFilters(datasets) {
   document.getElementById("noResults").hidden = shown > 0;
 
   document.querySelectorAll(".filter-button").forEach(btn => {
-    btn.setAttribute("aria-pressed", String(state[btn.dataset.group] === btn.dataset.value));
+    const selected = state[btn.dataset.group];
+    const pressed = btn.dataset.value === "all"
+      ? selected.size === 0
+      : selected.has(btn.dataset.value);
+    btn.setAttribute("aria-pressed", String(pressed));
   });
 
   writeStateToUrl();
@@ -306,11 +314,16 @@ async function init() {
     applyFilters(datasets);
   });
 
-  // Filter buttons (one listener for both groups)
+  // Filter buttons (one listener for both groups). An option button
+  // toggles that option; "All datasets" clears the group's selections.
   document.querySelector(".filter-section").addEventListener("click", ev => {
     const btn = ev.target.closest(".filter-button");
     if (!btn) return;
-    state[btn.dataset.group] = btn.dataset.value;
+    const selected = state[btn.dataset.group];
+    const value = btn.dataset.value;
+    if (value === "all") selected.clear();
+    else if (selected.has(value)) selected.delete(value);
+    else selected.add(value);
     applyFilters(datasets);
   });
 

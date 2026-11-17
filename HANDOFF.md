@@ -17,7 +17,10 @@ _Last updated: 2026-11-17_
 - `.claude/launch.json` — `dashboard` server config for the browser preview
 - Design references (user's): `docs/html_css_design/` (HTML, CSS, images)
 - Data background (user's): `docs/about_data/Data archives by dataset.md`
-  (added by the user; not yet read or used)
+  — a start on per-dataset metadata (archive name + dataset record link).
+  The user is still gathering more metadata and will ask how to add it to
+  the dashboard; don't wire it in before then.
+- Current layout/color design: `docs/html_css_design/images/new_dashboard_layout_2026-11-17-6.46am.png`
 - Design decisions: `notes/dashboard-design-notes.md`
 
 ## How to run
@@ -48,7 +51,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
   data source (Gauge-based / Satellite / Reanalysis / Merged) and coverage
   (CONUS / North America / Global land / Quasi-global / Global).
 - Search matches all words across every CSV field.
-- Search, filters and open cards are stored in the URL (`?q=&category=&coverage=&open=`),
+- Filters are multi-select (click to add/remove; "All datasets" clears the group).
+- Search, filters and open cards are stored in the URL (`?q=&category=a,b&coverage=&open=`),
   which is the hook for restoring the dashboard after the future dataset page.
 
 ## Open questions for the user
@@ -73,6 +77,11 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Session log
 
+- Session 2 (2026-11-17): restyled to `new_dashboard_layout_2026-11-17-6.46am.png`
+  — pale page, whole dashboard on a navy (#1F3244) panel, search on navy, and
+  filters + dataset index in one white panel (see "Layout and colors" in
+  `notes/dashboard-design-notes.md`). The user once saw a stale stylesheet:
+  after CSS changes, remind them to hard-reload (Cmd+Shift+R).
 - Session 1 (2026-11-17): built the first dashboard from the design files and
   the CSV; moved the data into `app/data/`; decided on plain HTML now with
   GitHub Pages later; added the skills and viewing sections to CLAUDE.md;
@@ -81,8 +90,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
 ## Next steps
 
 1. Get answers to the open questions above and adjust filters / card content.
-2. Read `docs/about_data/Data archives by dataset.md` and see what it adds
-   to cards or panels.
+2. When the user has more metadata, plan how to add it (archive names and
+   dataset record links from `docs/about_data/` would fit the panel).
 3. Set up Playwright (Firefox/WebKit) to check pages and accessibility.
 4. Plan the per-dataset detail page (tab view) and the "back to dashboard"
    path that restores state from the URL.
