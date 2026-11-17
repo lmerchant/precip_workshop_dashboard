@@ -16,9 +16,11 @@ _Last updated: 2026-11-17_
     the top-level `data/` on 2026-11-17)
 - `.claude/launch.json` — `dashboard` server config for the browser preview
 - `.github/workflows/pages.yml` — publishes `app/` to GitHub Pages on each
-  push to `main` (https://lmerchant.github.io/precip_workshop_dashboard/).
-  Needs Settings → Pages → Source: GitHub Actions. Work on `develop`, merge
-  into `main` to publish.
+  push to `main`. Live and working since 2026-11-17 at
+  https://lmerchant.github.io/precip_workshop_dashboard/ (Pages source is set
+  to GitHub Actions). The user links it from their own GitHub Pages home page.
+- GitHub repo: https://github.com/lmerchant/precip_workshop_dashboard
+  (remote `origin`)
 - Design references (user's): `docs/html_css_design/` (HTML, CSS, images)
 - Data background (user's): `docs/about_data/Data archives by dataset.md`
   — a start on per-dataset metadata (archive name + dataset record link).
@@ -43,19 +45,23 @@ with a local server. Don't build a copy of the data into app/. The user views
 `app/` in their own browser, not as an artifact.
 
 Decision (2026-11-17): stay with plain HTML/CSS/JS, with no framework yet. The
-site will go on GitHub Pages later, which works as-is: publish the `app/`
-folder (e.g. with the Pages GitHub Action). Astro is the preferred framework if one is ever
+site is on GitHub Pages via the Actions workflow, which publishes `app/` as-is. Astro is the preferred framework if one is ever
 needed (it can build one page per dataset from the CSV). Next.js static export
 was considered and set aside. Revisit when the dataset detail page is built.
 
-## Current state (session 1)
+## Current state (after session 2)
 
 - 42 datasets render as cards; click a card to open the detail panel.
 - Filters are derived from the CSV text (no category column exists):
   data source (Gauge-based / Satellite / Reanalysis / Merged) and coverage
   (CONUS / North America / Global land / Quasi-global / Global).
 - Search matches all words across every CSV field.
-- Filters are multi-select (click to add/remove; "All datasets" clears the group).
+- Filters are multi-select (click to add/remove; "All datasets" clears the
+  group). Within a group options are OR'd; the two groups are AND'd.
+- Look: navy dashboard panel on a #90A8BE page, grey #E3E8EC cards with a 4px
+  #235C70 rule, #DAE4EC hover/open header, white open panel, bright
+  data-source tags with #434343 text. All text passes WCAG AA; details in
+  `notes/dashboard-design-notes.md`.
 - Search, filters and open cards are stored in the URL (`?q=&category=a,b&coverage=&open=`),
   which is the hook for restoring the dashboard after the future dataset page.
 
@@ -67,6 +73,14 @@ was considered and set aside. Revisit when the dataset detail page is built.
 - Header wording (title, "GLOBAL & REGIONAL COLLECTION").
 
 ## Working preferences (see also CLAUDE.md)
+
+- Git: work and commit on `develop`. To publish, merge `develop` into `main`
+  and push (`git switch main && git merge --ff-only develop && git push
+  origin main develop && git switch develop`). The user has done the merge and
+  push themselves so far; ask before pushing.
+- When the user pastes CSS values, apply them as variables at the top of
+  `app/styles.css`, and adjust text colors if needed to pass WCAG AA (the
+  user has said that's fine).
 
 - Put everything the user views in `app/`; they open it in their own browser
   (no artifacts). After each big change, give them the server command from
@@ -84,8 +98,11 @@ was considered and set aside. Revisit when the dataset detail page is built.
 - Session 2 (2026-11-17): restyled to `new_dashboard_layout_2026-11-17-6.46am.png`
   — pale page, whole dashboard on a navy (#1F3244) panel, search on navy, and
   filters + dataset index in one white panel (see "Layout and colors" in
-  `notes/dashboard-design-notes.md`). The user once saw a stale stylesheet:
-  after CSS changes, remind them to hard-reload (Cmd+Shift+R).
+  `notes/dashboard-design-notes.md`). Then the user's own card colors
+  (#90A8BE page, #E3E8EC cards, #DAE4EC hover/open) and bright tag colors;
+  multi-select filters; GitHub Pages workflow — site is live. The user once
+  saw a stale stylesheet: after CSS/JS changes, remind them to hard-reload
+  (Cmd+Shift+R).
 - Session 1 (2026-11-17): built the first dashboard from the design files and
   the CSV; moved the data into `app/data/`; decided on plain HTML now with
   GitHub Pages later; added the skills and viewing sections to CLAUDE.md;
@@ -99,4 +116,6 @@ was considered and set aside. Revisit when the dataset detail page is built.
 3. Set up Playwright (Firefox/WebKit) to check pages and accessibility.
 4. Plan the per-dataset detail page (tab view) and the "back to dashboard"
    path that restores state from the URL.
-5. GitHub Pages workflow added 2026-11-17; confirm the first deploy works.
+5. Consider adding the "Data archives" links (docs/about_data) once the user
+   confirms the metadata format; each publish is a merge of `develop` into
+   `main`.
