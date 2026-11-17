@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Local working files (envs, caches, downloads)
+.work/
+
+# Claude Code: personal/local settings and internal state
+.claude/settings.local.json
+.claude/.cc-writes/
+
+# Node / Playwright (for when Playwright is set up)
+node_modules/
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

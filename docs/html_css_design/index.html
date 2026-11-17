@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precipitation Workshop Datasets</title>
+</head>
+
+<body>
+
+<main class="dashboard">
+
+  <!-- HERO -->
+  <header class="hero">
+
+    <div class="hero-top">
+      <span>PRECIPITATION DATASETS</span>
+    </div>
+
+    <h1>Precipitation Datasets</h1>
+
+    <p class="hero-description">
+      An organized collection of climate observations, environmental records, and scientific research.
+    </p>
+
+    <div class="hero-bottom">
+      <span>30 DATASETS</span>
+      <span>US COLLECTION</span>
+    </div>
+
+  </header>
+
+  <!-- SEARCH -->
+  <div class="search-box">
+    <span>⌕</span>
+    <input
+      type="search"
+      id="searchInput"
+      placeholder="Search datasets..."
+    >
+  </div>
+
+  <!-- FILTERS -->
+  <section class="filters">
+
+    <h2>FILTER BY CATEGORY</h2>
+
+    <div class="filter-buttons">
+
+      <button class="filter-btn active"
+        data-category="all">All datasets</button>
+
+      <button class="filter-btn"
+        data-category="atmospheric">Atmospheric</button>
+
+      <button class="filter-btn"
+        data-category="oceanographic">Oceanographic</button>
+
+      <button class="filter-btn"
+        data-category="temperature">Temperature</button>
+
+      <button class="filter-btn"
+        data-category="geospatial">Geospatial</button>
+
+    </div>
+
+  </section>
+
+  <!-- DATASET INDEX -->
+  <section>
+
+    <div class="section-heading">
+      <h2>Dataset index</h2>
+      <span class="dataset-count" id="datasetCount">
+        01 — 06
+      </span>
+    </div>
+
+    <div class="dataset-list" id="datasetList">
+
+      <!-- DATASET 001 -->
+      <article class="dataset-card">
+        <button class="dataset-header" aria-expanded="false">
+          <div class="dataset-index">
+            DATASET 001 / ATMOSPHERIC
+          </div>
+
+          <h2>Global Temperature Records</h2>
+
+          <p class="dataset-description">
+            Historical temperature observations across
+            global monitoring locations and research stations.
+          </p>
+
+          <div class="dataset-tags">
+            <span class="tag tag-blue">Temperature</span>
+            <span class="tag tag-slate">Global</span>
+            <span class="tag tag-neutral">1980-2025</span>
+          </div>
+
+          <span class="expand-icon">+</span>
+        </button>
+
+        <div class="dataset-details">
+          <h3>Dataset overview</h3>
+          <p>
+            Historical global temperature observations collected
+            from monitoring stations and scientific sources.
+          </p>
+
+          <div class="section-divider"></div>
+
+          <h3>Dataset metadata</h3>
+
+          <div class="metadata-grid">
+            <div>
+              <label>GEOGRAPHIC LOCATION</label>
+              <span>Global</span>
+            </div>
+            <div>
+              <label>TIME PERIOD</label>
+              <span>1980-2025</span>
+            </div>
+            <div>
+              <label>DATASET GROUP</label>
+              <span>Atmospheric Science</span>
+            </div>
+            <div>
+              <label>DATA TYPE</label>
+              <span>Observational</span>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <h3>Supporting information</h3>
+          <ul>
+            <li>Historical observations</li>
+            <li>Global geographic coverage</li>
+            <li>Long-term climate records</li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- DATASET 002 -->
+      <article class="dataset-card">
+        <button class="dataset-header" aria-expanded="false">
+          <div class="dataset-index">
+            DATASET 002 / ATMOSPHERIC
+          </div>
+
+          <h2>Global Temperature Records</h2>
+
+          <p class="dataset-description">
+            Historical temperature observations across
+            global monitoring locations and research stations.
+          </p>
+
+          <div class="dataset-tags">
+            <span class="tag tag-blue">Temperature</span>
+            <span class="tag tag-slate">Global</span>
+            <span class="tag tag-neutral">1980-2025</span>
+          </div>
+
+          <span class="expand-icon">+</span>
+        </button>
+
+        <div class="dataset-details">
+          <h3>Dataset overview</h3>
+          <p>
+            Historical global temperature observations collected
+            from monitoring stations and scientific sources.
+          </p>
+
+          <div class="section-divider"></div>
+
+          <h3>Dataset metadata</h3>
+
+          <div class="metadata-grid">
+            <div>
+              <label>GEOGRAPHIC LOCATION</label>
+              <span>Global</span>
+            </div>
+            <div>
+              <label>TIME PERIOD</label>
+              <span>1980-2025</span>
+            </div>
+            <div>
+              <label>DATASET GROUP</label>
+              <span>Atmospheric Science</span>
+            </div>
+            <div>
+              <label>DATA TYPE</label>
+              <span>Observational</span>
+            </div>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <h3>Supporting information</h3>
+          <ul>
+            <li>Historical observations</li>
+            <li>Global geographic coverage</li>
+            <li>Long-term climate records</li>
+          </ul>
+        </div>
+      </article>
+
+    </div>
+
+  </section>
+
+  <footer>
+    PRECIPITATION WORKSHOP - 2026
+  </footer>
+
+</main>
+
+<script>
+
+// CATEGORY FILTERS
+
+const filterButtons =
+  document.querySelectorAll(".filter-btn");
+
+const cards =
+  document.querySelectorAll(".dataset-card");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const count =
+  document.getElementById("datasetCount");
+
+let activeCategory = "all";
+
+function filterDatasets() {
+
+  const searchTerm =
+    searchInput.value.toLowerCase();
+
+  let visibleCount = 0;
+
+  cards.forEach(card => {
+
+    const category =
+      card.dataset.category;
+
+    const text =
+      card.textContent.toLowerCase();
+
+    const matchesCategory =
+      activeCategory === "all" ||
+      category.split(" ").includes(activeCategory);
+
+    const matchesSearch =
+      text.includes(searchTerm);
+
+    const visible =
+      matchesCategory && matchesSearch;
+
+    card.style.display =
+      visible ? "grid" : "none";
+
+    if (visible) visibleCount++;
+
+  });
+
+  count.textContent =
+    `01 — ${String(visibleCount).padStart(2, "0")}`;
+}
+
+filterButtons.forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    filterButtons.forEach(btn =>
+      btn.classList.remove("active")
+    );
+
+    button.classList.add("active");
+
+    activeCategory =
+      button.dataset.category;
+
+    filterDatasets();
+
+  });
+
+});
+
+// SEARCH
+
+searchInput.addEventListener(
+  "input",
+  filterDatasets
+);
+
+// EXPAND DATASET CARDS
+
+document.querySelectorAll(".expand-btn")
+  .forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      const card =
+        button.closest(".dataset-card");
+
+      card.classList.toggle("expanded");
+
+    });
+
+  });
+
+</script>
+
+</body>
+</html>
