@@ -9,11 +9,12 @@ _Last updated: 2026-11-17_
   - `index.html` — page shell: header, search, filter groups, dataset list
   - `styles.css` — based on `my_docs/html_css_design/styles.css`, plus tag colors,
     panel animation, focus styles, mobile tweaks
-  - `app.js` — loads `data/precipitation_workshop_datasets.csv` (relative to
-    `app/`), builds one card per row, search, filters, expand/collapse panels,
-    state in URL
-  - `data/precipitation_workshop_datasets.csv` — the dataset table (moved from
-    the top-level `data/` on 2026-11-17)
+  - `app.js` — loads `data/datasets.json` (relative to `app/`), builds one
+    card per dataset, search, filters, expand/collapse panels, state in URL
+  - `data/datasets.json` — the dataset data (41 datasets), including each
+    dataset's `access_endpoints` list. This is now the file to edit; format in
+    `notes/dashboard-design-notes.md`.
+  - The old CSV now lives only in `my_docs/about_data/` (not in git).
 - `.claude/launch.json` — `dashboard` server config for the browser preview
 - `.github/workflows/pages.yml` — publishes `app/` to GitHub Pages on each
   push to `main`. Live and working since 2026-11-17 at
@@ -26,9 +27,9 @@ _Last updated: 2026-11-17_
   the old `docs/` files in git history).
 - Design references (user's): `my_docs/html_css_design/` (HTML, CSS, images)
 - Data background (user's): `my_docs/about_data/Data archives by dataset.md`
-  — a start on per-dataset metadata (archive name + dataset record link).
-  The user is still gathering more metadata and will ask how to add it to
-  the dashboard; don't wire it in before then.
+  — per-dataset archive names and links; its links are now in
+  `datasets.json` as access endpoints. The user is gathering more metadata
+  and will add it as new JSON fields.
 - Current layout/color design: `my_docs/html_css_design/images/new_dashboard_layout_2026-11-17-6.46am.png`
 - Design decisions: `notes/dashboard-design-notes.md`
 
@@ -43,7 +44,9 @@ then open http://127.0.0.1:3000/ (the user uses port 3000; the browser-pane
 preview in `.claude/launch.json` uses 8000 — stop it when done so it doesn't
 block the user's port)
 
-Decision (2026-11-17): keep reading the CSV at runtime and serving the page
+Decision (2026-11-17, updated): the data moved from CSV to JSON
+(`app/data/datasets.json`) so a dataset can hold lists such as several access
+endpoints. Keep reading the data at runtime and serving the page
 with a local server. Don't build a copy of the data into app/. The user views
 `app/` in their own browser, not as an artifact.
 
@@ -54,11 +57,13 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Current state (after session 2)
 
-- 42 datasets render as cards; click a card to open the detail panel.
-- Filters are derived from the CSV text (no category column exists):
+- 41 datasets render as cards (the user removed a duplicate "PRISM" row);
+  click a card to open the detail panel, which ends with a "Data access
+  endpoints" table (name + link) for each dataset.
+- Filters are derived from the data text (no category field exists):
   data source (Gauge-based / Satellite / Reanalysis / Merged) and coverage
   (CONUS / North America / Global land / Quasi-global / Global).
-- Search matches all words across every CSV field.
+- Search matches all words across every text field and the endpoint names/URLs.
 - Filters are multi-select (click to add/remove; "All datasets" clears the
   group). Within a group options are OR'd; the two groups are AND'd.
 - Look: navy dashboard panel on a #90A8BE page, grey #E3E8EC cards with a 4px
@@ -70,7 +75,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Open questions for the user
 
-- Should categories come from a new CSV column instead of text rules?
+- Should categories come from new JSON fields (e.g. `data_source`,
+  `coverage_group`) instead of text rules? Easy now that the data is JSON.
 - Which filter groups matter most (also: temporal frequency, archive, CDR status)?
 - Split "Region — Dataset" names into region and dataset name?
 - Header wording (title, "GLOBAL & REGIONAL COLLECTION").
@@ -113,12 +119,12 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Next steps
 
+
 1. Get answers to the open questions above and adjust filters / card content.
-2. When the user has more metadata, plan how to add it (archive names and
-   dataset record links from `my_docs/about_data/` would fit the panel).
+2. When the user has more metadata, add it as JSON fields and show it in the
+   panel (or the future dataset page).
 3. Set up Playwright (Firefox/WebKit) to check pages and accessibility.
 4. Plan the per-dataset detail page (tab view) and the "back to dashboard"
    path that restores state from the URL.
-5. Consider adding the "Data archives" links (my_docs/about_data) once the user
-   confirms the metadata format; each publish is a merge of `develop` into
-   `main`.
+5. Consider showing endpoint `role` (e.g. a "Mirror" label) and using the
+   dataset `id` in URLs instead of the card number.

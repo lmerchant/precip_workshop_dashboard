@@ -63,6 +63,10 @@
   --tag-cdr-text: #FFFFFF;
 
   --focus-ring: #2A5367;
+
+  /* Links in the access-endpoints table */
+  --link-text: #2B5FB4;        /* 6:1 on white */
+  --link-hover: #1D4785;
 }
 
 
@@ -510,6 +514,54 @@ body {
 }
 
 
+/* 11b. DATA ACCESS ENDPOINTS TABLE */
+
+.endpoints-table {
+  width: 100%;
+  max-width: 820px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.endpoints-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted-text);
+  text-align: left;
+  padding: 0 16px 8px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.endpoints-table td {
+  padding: 10px 16px 10px 0;
+  border-bottom: 1px solid var(--divider);
+  vertical-align: top;
+  color: var(--deep-ocean);
+  font-weight: 500;
+}
+
+.endpoints-table th:first-child,
+.endpoints-table td:first-child {
+  width: 40%;
+}
+
+.endpoints-table a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 400;
+  color: var(--link-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.endpoints-table a:hover {
+  color: var(--link-hover);
+}
+
+
 /* 12. DIVIDERS */
 
 .section-divider {
@@ -583,6 +635,11 @@ body {
   .metadata-grid {
     grid-template-columns: 1fr;
     gap: 14px;
+  }
+
+  .endpoints-table th:first-child,
+  .endpoints-table td:first-child {
+    width: 45%;
   }
 
   .filter-section {

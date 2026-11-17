@@ -1,24 +1,26 @@
 /* Precipitation workshop dataset dashboard.
  *
- * Loads the dataset CSV, builds one card per row, and wires up search,
+ * Loads the dataset JSON, builds one card per dataset, and wires up search,
  * filters and the expandable detail panels. The current search, filters
  * and open cards are kept in the URL query string, so a reload (or coming
  * back from a future dataset page) shows the dashboard as it was.
  */
 
-const CSV_PATH = "data/precipitation_workshop_datasets.csv";
+const DATA_PATH = "data/datasets.json";
 
-// CSV column names, in one place so a renamed column is a one-line change.
+// Field names in datasets.json, in one place so a renamed field is a
+// one-line change. Each dataset also has an "access_endpoints" list of
+// { name, url, role } objects (role: primary, alternative or mirror).
 const COL = {
-  name: "Region / dataset",
-  archive: "Data Archive(s)",
-  basis: "Precipitation basis",
-  period: "POR",
-  cdr: "Formal CDR?",
-  update: "Update status / latency",
-  coverage: "Spatial coverage",
-  resolution: "Native / distributed resolution",
-  frequency: "Temporal frequency",
+  name: "name",
+  archive: "data_archive",
+  basis: "precipitation_basis",
+  period: "period_of_record",
+  cdr: "formal_cdr",
+  update: "update_status",
+  coverage: "spatial_coverage",
+  resolution: "resolution",
+  frequency: "temporal_frequency",
 };
 
 // Fields shown in the metadata grid of the detail panel, in order.
@@ -32,7 +34,7 @@ const METADATA_FIELDS = [
 ];
 
 /* ---------- Derived categories ----------
- * The CSV has no category column, so the data-source type and coverage
+ * The data has no category field, so the data-source type and coverage
  * are worked out from the text. The first matching rule wins.
  */
 
@@ -69,56 +71,20 @@ function coverageOf(row) {
 }
 
 function isFormalCDR(row) {
-  return /^yes/i.test(row[COL.cdr].trim());
+  return /^yes/i.test((row[COL.cdr] || "").trim());
 }
 
 // Short "start–end" label for the period-of-record tag, e.g. "1979–present".
 // Start is the first year mentioned (the main record is listed first);
 // the full text is in the detail panel.
 function shortPeriod(text) {
+  text = text || "";
   const years = (text.match(/\b(1[89]\d\d|20\d\d)\b/g) || []).map(Number);
   if (years.length === 0) return text;
   const start = years[0];
   const ongoing = /present|onward|most recent/i.test(text);
   const end = ongoing ? "present" : Math.max(...years);
   return start === end ? String(start) : `${start}–${end}`;
-}
-
-/* ---------- CSV parsing ----------
- * Handles quoted fields with commas, newlines and doubled quotes.
- */
-
-function parseCSV(text) {
-  text = text.replace(/^﻿/, "");
-  const rows = [];
-  let row = [];
-  let field = "";
-  let inQuotes = false;
-
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (inQuotes) {
-      if (ch === '"' && text[i + 1] === '"') { field += '"'; i++; }
-      else if (ch === '"') inQuotes = false;
-      else field += ch;
-    } else if (ch === '"') {
-      inQuotes = true;
-    } else if (ch === ",") {
-      row.push(field); field = "";
-    } else if (ch === "\n" || ch === "\r") {
-      if (ch === "\r" && text[i + 1] === "\n") i++;
-      row.push(field); field = "";
-      rows.push(row); row = [];
-    } else {
-      field += ch;
-    }
-  }
-  if (field !== "" || row.length) { row.push(field); rows.push(row); }
-
-  const [header, ...body] = rows.filter(r => r.some(v => v.trim() !== ""));
-  return body.map(values =>
-    Object.fromEntries(header.map((h, i) => [h.trim(), (values[i] || "").trim()]))
-  );
 }
 
 /* ---------- Rendering ---------- */
@@ -132,6 +98,30 @@ function escapeHtml(value) {
 }
 
 const pad3 = n => String(n).padStart(3, "0");
+
+// Link text for an endpoint: the address without "https://" or a trailing "/".
+const displayUrl = url => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+function endpointsHtml(endpoints) {
+  const e = escapeHtml;
+  if (!endpoints || endpoints.length === 0) return "";
+  const rows = endpoints.map(ep => `
+      <tr>
+        <td>${e(ep.name)}</td>
+        <td><a href="${e(ep.url)}" target="_blank" rel="noopener noreferrer">${e(displayUrl(ep.url))}<span class="visually-hidden"> (opens in a new tab)</span></a></td>
+      </tr>`).join("");
+  return `
+          <div class="section-divider"></div>
+
+          <h4 class="details-heading caps">Data access endpoints</h4>
+          <table class="endpoints-table">
+            <thead>
+              <tr><th scope="col">Name</th><th scope="col">Link address</th></tr>
+            </thead>
+            <tbody>${rows}
+            </tbody>
+          </table>`;
+}
 
 function cardHtml(ds) {
   const r = ds.row;
@@ -175,6 +165,7 @@ function cardHtml(ds) {
 
           <h4 class="details-heading caps">Dataset metadata</h4>
           <dl class="metadata-grid">${metadata}</dl>
+${endpointsHtml(r.access_endpoints)}
         </div>
       </div>
     </div>
@@ -256,17 +247,25 @@ function setExpanded(card, expanded) {
   if (expanded) state.open.add(n); else state.open.delete(n);
 }
 
+// Text the search box matches against: every text field, plus the
+// endpoint names and addresses.
+function searchTextOf(row) {
+  const fields = Object.values(row).filter(v => typeof v === "string");
+  const endpoints = (row.access_endpoints || []).flatMap(ep => [ep.name, ep.url]);
+  return [...fields, ...endpoints].join(" ").toLowerCase();
+}
+
 async function init() {
   const list = document.getElementById("datasetList");
 
   let rows;
   try {
-    const res = await fetch(CSV_PATH);
+    const res = await fetch(DATA_PATH);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    rows = parseCSV(await res.text());
+    rows = (await res.json()).datasets;
   } catch (err) {
     list.innerHTML = `<p class="status-message">Could not load the dataset file
-      (<code>${escapeHtml(CSV_PATH)}</code>: ${escapeHtml(err.message)}).
+      (<code>${escapeHtml(DATA_PATH)}</code>: ${escapeHtml(err.message)}).
       Open this page through a local web server started from the <code>app</code> folder,
       for example <code>python3 -m http.server 3000 --bind 127.0.0.1</code>,
       then visit <code>http://127.0.0.1:3000/</code>.</p>`;
@@ -279,7 +278,7 @@ async function init() {
     category: categoryOf(row),
     coverage: coverageOf(row),
     cdr: isFormalCDR(row),
-    searchText: Object.values(row).join(" ").toLowerCase(),
+    searchText: searchTextOf(row),
   }));
   datasets.forEach(ds => {
     ds.searchText += " " + [ds.category.label, ds.coverage.label, ds.cdr ? "noaa cdr" : ""]

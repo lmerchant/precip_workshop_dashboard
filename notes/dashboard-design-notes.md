@@ -1,20 +1,48 @@
 # Dashboard design notes
 
-## CSV → card mapping
+## Data file: `app/data/datasets.json` (since 2026-11-17)
 
-| Card part | CSV column |
+Replaced the CSV (user's choice: JSON, because a dataset can have several
+access links and more metadata is coming). Shape:
+
+```json
+{ "datasets": [ {
+    "id": "gpcc-monitoring-noaa-psl-mirror-dwd-gpcc-source",
+    "name": "...", "data_archive": "...", "precipitation_basis": "...",
+    "period_of_record": "...", "formal_cdr": "...", "update_status": "...",
+    "spatial_coverage": "...", "resolution": "...", "temporal_frequency": "...",
+    "access_endpoints": [
+      { "name": "DWD/GPCC archive", "url": "https://...", "role": "primary" },
+      { "name": "NOAA PSL mirror",  "url": "https://...", "role": "mirror" } ]
+} ] }
+```
+
+- `role` is `primary`, `alternative` or `mirror`; it's stored but not shown yet.
+- `id` is a stable slug of the name (not used by the page yet; a good key for
+  the future dataset page and for URLs instead of the card number).
+- Endpoints came from `my_docs/about_data/Data archives by dataset.md`
+  (links only; archives listed there without a link were left out). Tracking
+  `utm_` parameters were removed. One-time build script:
+  `.work/build_json.py` (not in git).
+- New fields: add them to each dataset object; to show one in the panel, add
+  it to `COL` and `METADATA_FIELDS` in app.js. Search covers every text field
+  plus endpoint names and URLs.
+
+## JSON → card mapping
+
+| Card part | JSON field |
 |---|---|
-| Title | Region / dataset |
-| Label line "DATASET 007 / REANALYSIS" | row number + derived data-source type |
-| Description | Precipitation basis |
-| Tags | data-source type, coverage, short period (e.g. `1940–present`), `NOAA CDR` if Formal CDR? starts with "YES" |
-| Panel: Update status | Update status / latency |
-| Panel: metadata grid | Data Archive(s), POR, Spatial coverage, Native / distributed resolution, Temporal frequency, Formal CDR? |
-
-Column names live in the `COL` object at the top of `app/app.js`; the panel
-fields are the `METADATA_FIELDS` list.
+| Title | `name` |
+| Label line "DATASET 007 / REANALYSIS" | position in the list + derived data-source type |
+| Description | `precipitation_basis` |
+| Tags | data-source type, coverage, short period (e.g. `1940–present`), `NOAA CDR` if `formal_cdr` starts with "YES" |
+| Panel: Update status | `update_status` |
+| Panel: metadata grid | `data_archive`, `period_of_record`, `spatial_coverage`, `resolution`, `temporal_frequency`, `formal_cdr` |
+| Panel: Data access endpoints | `access_endpoints` → table (Name / Link address); links open in a new tab, link text is the URL without `https://` |
 
 ## Derived categories (`CATEGORIES`, `COVERAGES` in app.js)
+
+(Rules below say "basis", "CDR field" etc. — the matching JSON fields.)
 
 First matching rule wins.
 
