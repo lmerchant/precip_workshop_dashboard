@@ -1,0 +1,569 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+/* Based on docs/html_css_design/styles.css */
+
+
+/* 1. COLOR VARIABLES */
+
+:root {
+  --navy: #0B1620;
+  --deep-ocean: #183346;
+  --ocean-slate: #2A5367;
+  --steel-blue: #537B8E;
+  --mist-blue: #9AB7C1;
+  --ice-blue: #E3EDF0;
+
+  --page-bg: #E3EDF0;
+  --card-bg: #FFFFFF;
+  --panel-bg: #EDF3F5;
+
+  --heading-text: #183346;
+  --body-text: #405B68;
+  --muted-text: #637C88;
+
+  --divider: #D5E0E4;
+
+  --tag-blue-bg: #D5E5EA;
+  --tag-blue-text: #315D76;
+
+  --tag-slate-bg: #E3EDF0;
+  --tag-slate-text: #405B68;
+
+  --tag-neutral-bg: #EDF1F2;
+  --tag-neutral-text: #405B68;
+
+  /* Category tag colors (one per data-source type) */
+  --tag-gauge-bg: #DDEDE3;
+  --tag-gauge-text: #2F6446;
+  --tag-satellite-bg: #D5E5EA;
+  --tag-satellite-text: #315D76;
+  --tag-reanalysis-bg: #E4E1F0;
+  --tag-reanalysis-text: #4D4580;
+  --tag-merged-bg: #F2E6D3;
+  --tag-merged-text: #7A5422;
+  --tag-cdr-bg: #183346;
+  --tag-cdr-text: #FFFFFF;
+
+  --focus-ring: #2A5367;
+}
+
+
+/* 2. DASHBOARD */
+
+body {
+  margin: 0;
+  background: var(--page-bg);
+  color: var(--body-text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+
+/* 3. HEADER */
+
+.dashboard-header {
+  background: var(--deep-ocean);
+  color: #FFFFFF;
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.header-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--mist-blue);
+}
+
+.dashboard-title {
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: #FFFFFF;
+  margin: 0 0 12px;
+}
+
+.dashboard-description {
+  font-size: 15px;
+  color: #C4D7DF;
+  max-width: 650px;
+  margin: 0;
+}
+
+.header-divider {
+  height: 1px;
+  background: var(--steel-blue);
+  margin: 24px 0 16px;
+}
+
+.header-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #C4D7DF;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+
+/* 4. SEARCH BAR */
+
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 16px;
+  background: #FFFFFF;
+  border: 1px solid var(--divider);
+  margin-bottom: 24px;
+}
+
+.search-container:focus-within {
+  border-color: var(--ocean-slate);
+}
+
+.search-icon {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--steel-blue);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px 16px 14px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--heading-text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 15px;
+}
+
+.search-input::placeholder {
+  color: var(--muted-text);
+}
+
+
+/* 5. FILTER SECTION */
+
+.filter-section {
+  background: #FFFFFF;
+  padding: 20px 24px;
+  margin-bottom: 28px;
+  display: grid;
+  gap: 18px;
+}
+
+.filter-heading {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--steel-blue);
+  margin: 0 0 10px;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-button {
+  background: var(--ice-blue);
+  border: 1px solid var(--ice-blue);
+  border-radius: 0;
+  padding: 8px 13px;
+  color: var(--deep-ocean);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease,
+              color 0.2s ease,
+              border-color 0.2s ease;
+}
+
+.filter-button:hover {
+  border-color: var(--ocean-slate);
+}
+
+.filter-button[aria-pressed="true"] {
+  background: var(--deep-ocean);
+  border-color: var(--deep-ocean);
+  color: #FFFFFF;
+}
+
+.filter-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+
+
+/* 6. DATASET INDEX */
+
+.dataset-index-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.dataset-index-heading h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--deep-ocean);
+  margin: 0;
+}
+
+.dataset-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--steel-blue);
+}
+
+.status-message {
+  background: var(--card-bg);
+  padding: 22px 24px;
+  margin: 0;
+}
+
+.status-message code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  background: var(--panel-bg);
+  padding: 2px 5px;
+}
+
+
+/* 7. DATASET CARD */
+
+.dataset-card {
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--divider);
+}
+
+.dataset-card:last-child {
+  border-bottom: none;
+}
+
+/* The header is not itself a button; the title button's ::after
+   stretches over the whole header so any click on it toggles. */
+.dataset-header {
+  position: relative;
+  padding: 22px 24px;
+}
+
+.dataset-header:hover {
+  background: #F7F9FA;
+}
+
+.dataset-number {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--steel-blue);
+  margin-bottom: 8px;
+}
+
+.dataset-title {
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--deep-ocean);
+  margin: 0 40px 6px 0;
+}
+
+.dataset-toggle {
+  all: unset;
+  cursor: pointer;
+}
+
+.dataset-toggle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.dataset-toggle:focus-visible {
+  outline: none;
+}
+
+.dataset-toggle:focus-visible::after {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.dataset-description {
+  max-width: 820px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--body-text);
+  margin: 0 40px 14px 0;
+}
+
+
+/* 8. DATASET TAGS */
+
+.dataset-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 5px 9px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.tag-slate {
+  background: var(--tag-slate-bg);
+  color: var(--tag-slate-text);
+}
+
+.tag-neutral {
+  background: var(--tag-neutral-bg);
+  color: var(--tag-neutral-text);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.tag-gauge      { background: var(--tag-gauge-bg);      color: var(--tag-gauge-text); }
+.tag-satellite  { background: var(--tag-satellite-bg);  color: var(--tag-satellite-text); }
+.tag-reanalysis { background: var(--tag-reanalysis-bg); color: var(--tag-reanalysis-text); }
+.tag-merged     { background: var(--tag-merged-bg);     color: var(--tag-merged-text); }
+
+.tag-cdr {
+  background: var(--tag-cdr-bg);
+  color: var(--tag-cdr-text);
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.4px;
+}
+
+
+/* 9. EXPAND / COLLAPSE ICON */
+
+.expand-icon {
+  position: absolute;
+  right: 24px;
+  top: 20px;
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--deep-ocean);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.expand-icon .icon-close { display: none; }
+
+.dataset-card.expanded .expand-icon .icon-open  { display: none; }
+.dataset-card.expanded .expand-icon .icon-close { display: inline; }
+
+
+/* 10. EXPANDED PANEL
+   Animates open by transitioning the grid row from 0fr to 1fr. */
+
+.dataset-details {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+  background: var(--panel-bg);
+}
+
+.dataset-card.expanded .dataset-details {
+  grid-template-rows: 1fr;
+}
+
+.details-inner {
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0.25s;
+}
+
+.dataset-card.expanded .details-inner {
+  visibility: visible;
+}
+
+.details-content {
+  padding: 26px 24px;
+  border-top: 1px solid var(--divider);
+}
+
+.details-heading {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--deep-ocean);
+  margin: 0 0 8px;
+}
+
+.details-heading.caps {
+  font-size: 13px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.details-description {
+  max-width: 820px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--body-text);
+  margin: 0;
+}
+
+
+/* 11. METADATA GRID */
+
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 28px;
+  margin: 0;
+}
+
+.metadata-item dt {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted-text);
+  margin-bottom: 5px;
+}
+
+.metadata-item dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--deep-ocean);
+}
+
+
+/* 12. DIVIDERS */
+
+.section-divider {
+  height: 1px;
+  background: var(--divider);
+  border: none;
+  margin: 20px 0;
+}
+
+
+/* 13. FOOTER */
+
+.dashboard-footer {
+  margin-top: 32px;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--steel-blue);
+}
+
+
+/* 14. RESPONSIVE DESIGN */
+
+@media (max-width: 900px) {
+  .metadata-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .dashboard {
+    padding: 16px;
+  }
+
+  .dashboard-header {
+    padding: 24px 20px;
+  }
+
+  .dashboard-title {
+    font-size: 28px;
+  }
+
+  .header-top,
+  .header-meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .dataset-header {
+    padding: 18px 16px;
+  }
+
+  .expand-icon {
+    right: 16px;
+    top: 16px;
+  }
+
+  .dataset-title {
+    font-size: 18px;
+  }
+
+  .details-content {
+    padding: 20px 16px;
+  }
+
+  .metadata-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .filter-section {
+    padding: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dataset-details,
+  .details-inner {
+    transition: none;
+  }
+}
