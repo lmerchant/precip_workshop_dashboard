@@ -15,6 +15,10 @@ _Last updated: 2026-11-17_
   - `data/precipitation_workshop_datasets.csv` — the dataset table (moved from
     the top-level `data/` on 2026-11-17)
 - `.claude/launch.json` — `dashboard` server config for the browser preview
+- `.github/workflows/pages.yml` — publishes `app/` to GitHub Pages on each
+  push to `main` (https://lmerchant.github.io/precip_workshop_dashboard/).
+  Needs Settings → Pages → Source: GitHub Actions. Work on `develop`, merge
+  into `main` to publish.
 - Design references (user's): `docs/html_css_design/` (HTML, CSS, images)
 - Data background (user's): `docs/about_data/Data archives by dataset.md`
   — a start on per-dataset metadata (archive name + dataset record link).
@@ -95,4 +99,4 @@ was considered and set aside. Revisit when the dataset detail page is built.
 3. Set up Playwright (Firefox/WebKit) to check pages and accessibility.
 4. Plan the per-dataset detail page (tab view) and the "back to dashboard"
    path that restores state from the URL.
-5. Later: publish `app/` to GitHub Pages.
+5. GitHub Pages workflow added 2026-11-17; confirm the first deploy works.
