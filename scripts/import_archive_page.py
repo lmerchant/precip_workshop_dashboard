@@ -56,6 +56,7 @@ DROP_ITEM_PREFIXES = (
     "- **Pages to check by hand:**",
     "- **Sites to trust:**",
     "- Pages to check by hand",
+    "- **Sandbox:**",
 )
 
 # Files that exist only in the research project. A sentence that names

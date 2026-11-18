@@ -201,7 +201,7 @@ there. First one: NOAA NCEI, from the user's research answer
   link per entry in `archives.json` ("<name> — about this archive" or
   "— about this instrument"), carrying the dashboard state like the panel
   links do.
-- Instruments (NOAA Satellites, NASA Satellites, from the A4 R* query)
+- Instruments (NOAA Satellites, NASA Satellites, NOAA Rain Gauges, from the A4 R* query)
   are entries in `archives.json` with `"kind": "instrument"` and an empty
   `data_archive_names`; their files are in `content/instruments/<id>/`.
   They use `archive.html`, labelled "Instrument", with no "Datasets" list
@@ -213,7 +213,7 @@ there. First one: NOAA NCEI, from the user's research answer
   folders have no `rstar_query.md`.
 - Import script additions: drops sentences naming research-project files
   (`results.csv`, `check-by-hand.md`, `sites-to-trust.md`, ...) and the
-  "- Pages to check by hand" item; `--replace OLD NEW` rewrites text, used
+  "- Pages to check by hand" and "- **Sandbox:**" items; `--replace OLD NEW` rewrites text, used
   to point the NASA answer's "earlier NOAA run" link at
   `archive.html?id=noaa-satellites`. Links in a page to another
   `archive.html?...` page get the dashboard state added.

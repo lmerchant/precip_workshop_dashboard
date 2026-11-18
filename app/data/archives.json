@@ -52,6 +52,23 @@
           "query": "content/instruments/nasa-satellites/threats-2026-11-18.query.md"
         }
       ]
+    },
+    {
+      "id": "noaa-rain-gauges",
+      "kind": "instrument",
+      "name": "NOAA Rain Gauges",
+      "full_name": "National Oceanic and Atmospheric Administration rain gauges",
+      "data_archive_names": [],
+      "pages": [
+        {
+          "id": "threats",
+          "title": "Threat assessment",
+          "as_of": "2026-11-18",
+          "file": "content/instruments/noaa-rain-gauges/threats-2026-11-18.md",
+          "record": "content/instruments/noaa-rain-gauges/threats-2026-11-18.json",
+          "query": "content/instruments/noaa-rain-gauges/threats-2026-11-18.query.md"
+        }
+      ]
     }
   ]
 }
