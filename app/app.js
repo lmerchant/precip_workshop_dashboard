@@ -50,7 +50,7 @@ const METADATA_FIELDS = [
 function metadataValueHtml(col, value) {
   const e = escapeHtml;
   if (col === COL.archive) return archiveNamesHtml(value);
-  if (!value) return "Not stated";
+  if (!value) return "NA";
   if (col === COL.email) return `<a href="mailto:${e(value)}">${e(value)}</a>`;
   if (col === COL.doi) {
     const url = /^https?:\/\//.test(value) ? value : `https://doi.org/${value}`;
@@ -125,7 +125,7 @@ const displayUrl = url => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 // links' addresses up to date with the dashboard state.
 function archiveNamesHtml(text) {
   const names = splitArchiveNames(text);
-  if (names.length === 0) return "Not stated";
+  if (names.length === 0) return "NA";
   return names.map(name => {
     const archive = findArchive(archives, name);
     if (!archive) return escapeHtml(name);
@@ -198,7 +198,7 @@ function cardHtml(ds) {
       <div class="details-inner">
         <div class="details-content">
           <h4 class="details-heading">Update status</h4>
-          <p class="details-description">${e(r[COL.update] || "Not stated")}</p>
+          <p class="details-description">${e(r[COL.update] || "NA")}</p>
 
           <div class="section-divider"></div>
 
@@ -208,7 +208,7 @@ function cardHtml(ds) {
           <div class="section-divider"></div>
 
           <h4 class="details-heading">Notes</h4>
-          <p class="details-description">${e(r[COL.notes] || "Not stated")}</p>
+          <p class="details-description">${e(r[COL.notes] || "NA")}</p>
 ${endpointsHtml(r.access_endpoints)}
         </div>
       </div>
