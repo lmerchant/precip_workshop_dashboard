@@ -1,6 +1,6 @@
 # Handoff — Precipitation Workshop Dashboard
 
-_Last updated: 2026-11-18 (end of session 5)_
+_Last updated: 2026-11-18 (end of session 6)_
 
 ## What exists
 
@@ -12,12 +12,14 @@ _Last updated: 2026-11-18 (end of session 5)_
   - `app.js` — loads `data/datasets.json` (relative to `app/`), builds one
     card per dataset, search, filters, expand/collapse panels, state in URL
   - `archive.html`, `archive.js` — the archive page
-    (`archive.html?id=noaa-ncei`), see "Archive pages" in the design notes
+    (`archive.html?id=noaa-ncei`), also used for instrument pages
+    (`?id=noaa-satellites`); see "Archive pages" in the design notes
   - `shared.js` (helpers for both pages), `markdown.js` (Markdown renderer)
-  - `data/archives.json` — archives that have pages, and their pages
-  - `content/archives/<id>/` — per archive page: `<page>.md` (text),
-    `<page>.json` (research question + "searched on" list),
-    `<page>.query.md` (R* query statement)
+  - `data/archives.json` — archives and instruments that have pages, and
+    their pages; `"kind": "archive"` or `"instrument"`
+  - `content/archives/<id>/` and `content/instruments/<id>/` — per page:
+    `<page>.md` (text), `<page>.json` (research question + "searched on"
+    list), `<page>.query.md` (R* query statement)
   - `data/datasets.json` — the dataset data (45 datasets since session 5), including each
     dataset's `access_endpoints` list. This is now the file to edit; format in
     `notes/dashboard-design-notes.md`.
@@ -40,13 +42,19 @@ _Last updated: 2026-11-18 (end of session 5)_
 - Current layout/color design: `my_docs/html_css_design/images/new_dashboard_layout_2026-11-17-6.46am.png`
 - Design decisions: `notes/dashboard-design-notes.md`
 - `scripts/import_archive_page.py SOURCE.md DEST.md [--record
-  research-record.json] [--query rstar_query.md]` — copies a research
-  answer into `app/content/` (stripping references to the research
-  project's files) plus the record fields and R* query; then list the page
-  in `app/data/archives.json`. Run from the project folder.
+  research-record.json] [--query rstar_query.md] [--replace OLD NEW]` —
+  copies a research answer into `app/content/` (dropping the "Saved in"
+  paragraph, "Pages to check by hand" / "Sandbox" bullets, and sentences
+  naming research-project files such as `results.csv`) plus the record
+  fields and R* query; `--replace` rewrites text (e.g. a link to another
+  run → its dashboard page). Then list the page in
+  `app/data/archives.json`. Run from the project folder.
 - Research results (user's, from another project):
   `my_docs/about_data/rstar_query_results/archive_answers/<query>/<date_topic>/`
-  with `answer_*.md`, `research-record.json`, `rstar_query.md`. Only
+  with `answer_*.md`, `research-record.json`, `rstar_query.md`, and
+  `.../instrument_answers/A4_Rstar_query/<date_topic>/` with `answer_*.md`,
+  `research-record.json` and `A4_Rstar_query_*.md` (no `rstar_query.md`:
+  the query box text was written by hand, see session 6). Only
   `question` and `subquestions[].question` from the record are used so far;
   the user is still choosing other fields.
 
@@ -72,7 +80,7 @@ site is on GitHub Pages via the Actions workflow, which publishes `app/` as-is. 
 needed (it can build one page per dataset from the CSV). Next.js static export
 was considered and set aside. Revisit when the dataset detail page is built.
 
-## Current state (after session 5)
+## Current state (after session 6)
 
 - 45 datasets render as cards, sorted by data-source tag, coverage tag,
   then name; click a card to open the detail panel: update status,
@@ -107,10 +115,19 @@ was considered and set aside. Revisit when the dataset detail page is built.
   or more pages per archive show as tabs (tested). Content indented 40px.
 - `app/` is self-contained; the only outside resource is Google Fonts (IBM
   Plex), which the user chose to keep.
-- Everything through session 5's last code change is merged to `main` and
-  pushed by the user (2026-11-18): `main`, `develop` and both remotes were
-  at `7e65c64` before the session-5 handoff commit. Not checked on the
-  live site this session.
+- "R* metadata" row (session 6) under the coverage filters: one link per
+  `archives.json` entry — NOAA NCEI (archive), NOAA Satellites, NASA
+  Satellites, NOAA Rain Gauges (instruments, "— about this instrument").
+  Links carry the dashboard state. The NCEI links in the dataset panels
+  are still there.
+- Instrument pages: same layout as the NCEI page, header label
+  "Instrument", subtitle the agency's full name, R* query box with the
+  user's A4 text ("[Dependent infrastructure resilience]" / "Observation
+  network or sensor platform at risk" / description), question and
+  "Searched on", then the report. No dataset list (no dataset field names
+  an instrument). The NASA report's "earlier NOAA run" link opens the
+  NOAA Satellites page.
+- Session 6 commits are on `develop` only, not merged to `main` or pushed.
 
 ## Open questions for the user
 
@@ -146,6 +163,15 @@ was considered and set aside. Revisit when the dataset detail page is built.
   only, npm runs in the user's Terminal (see global CLAUDE.md).
 
 ## Session log
+
+- Session 6 (2026-11-18): added the "R* metadata" row with the NCEI link
+  (`a814f56` also holds the next item), then the NOAA Satellites and NASA
+  Satellites instrument pages from the A4 R* query (`a814f56`), then NOAA
+  Rain Gauges (`16943a7`). User's decisions: no dataset list on
+  instrument pages; query box uses their given text, not the whole A4
+  query file; remove research-file references and relink the NASA → NOAA
+  run link; one flat row of links. Left in the reports: "(read via
+  WebFetch)" and "(subagent report)" notes (offered to remove; no answer).
 
 - Session 5 (2026-11-18): merged the user's
   `my_docs/about_data/master_climate_inventory_subset.json` into
@@ -209,6 +235,14 @@ was considered and set aside. Revisit when the dataset detail page is built.
   first commits on `develop`.
 
 ## Next steps
+
+00. Publish session 6: the user merges `develop` into `main` and pushes
+   (command under "Working preferences").
+01. Ask whether to remove "(read via WebFetch)" / "(subagent report)"
+   notes from the instrument reports (import script could drop them).
+02. If instruments should list datasets, add an `instruments` field to
+   `datasets.json` (which datasets use NOAA/NASA satellites or NOAA
+   gauges) and show the list on the instrument pages.
 
 0a. Session 5 leftovers: the user fills the blanks in the 4 new datasets
    (TerraClimate, WorldClim, CMAP, CoCoRaHS). Until
