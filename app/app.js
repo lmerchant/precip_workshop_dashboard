@@ -26,6 +26,10 @@ const COL = {
   coverage: "spatial_coverage",
   resolution: "resolution",
   frequency: "temporal_frequency",
+  curator: "curator",
+  email: "email",
+  doi: "doi",
+  notes: "notes",
 };
 
 // Fields shown in the metadata grid of the detail panel, in order.
@@ -36,7 +40,24 @@ const METADATA_FIELDS = [
   ["Resolution", COL.resolution],
   ["Temporal frequency", COL.frequency],
   ["Formal CDR status", COL.cdr],
+  ["Curator", COL.curator],
+  ["Contact email", COL.email],
+  ["DOI", COL.doi],
 ];
+
+// One metadata value as HTML: archive names may link to archive pages,
+// an email becomes a mailto link and a DOI a doi.org link.
+function metadataValueHtml(col, value) {
+  const e = escapeHtml;
+  if (col === COL.archive) return archiveNamesHtml(value);
+  if (!value) return "Not stated";
+  if (col === COL.email) return `<a href="mailto:${e(value)}">${e(value)}</a>`;
+  if (col === COL.doi) {
+    const url = /^https?:\/\//.test(value) ? value : `https://doi.org/${value}`;
+    return `<a href="${e(url)}">${e(value)}</a>`;
+  }
+  return e(value);
+}
 
 /* ---------- Derived categories ----------
  * The data has no category field, so the data-source type and coverage
@@ -144,16 +165,16 @@ function endpointsHtml(endpoints) {
 function cardHtml(ds) {
   const r = ds.row;
   const e = escapeHtml;
-  const panelId = `details-${ds.number}`;
+  const panelId = `details-${ds.id}`;
 
   const metadata = METADATA_FIELDS.map(([label, col]) => `
     <div class="metadata-item">
       <dt>${e(label)}</dt>
-      <dd>${col === COL.archive ? archiveNamesHtml(r[col]) : e(r[col] || "Not stated")}</dd>
+      <dd>${metadataValueHtml(col, r[col])}</dd>
     </div>`).join("");
 
   return `
-  <article class="dataset-card" id="dataset-${ds.number}" data-number="${ds.number}">
+  <article class="dataset-card" id="dataset-${ds.id}" data-id="${ds.id}">
     <div class="dataset-header">
       <div class="dataset-number">Dataset ${pad3(ds.number)} / ${e(ds.category.label)}</div>
       <h3 class="dataset-title">
@@ -183,6 +204,11 @@ function cardHtml(ds) {
 
           <h4 class="details-heading caps">Dataset metadata</h4>
           <dl class="metadata-grid">${metadata}</dl>
+
+          <div class="section-divider"></div>
+
+          <h4 class="details-heading">Notes</h4>
+          <p class="details-description">${e(r[COL.notes] || "Not stated")}</p>
 ${endpointsHtml(r.access_endpoints)}
         </div>
       </div>
@@ -217,14 +243,14 @@ function readStateFromUrl() {
   const p = new URLSearchParams(location.search);
   state.search = p.get("q") || "";
   FILTER_GROUPS.forEach(g => { state[g] = new Set(listParam(p.get(g))); });
-  state.open = new Set(listParam(p.get("open")).map(Number));
+  state.open = new Set(listParam(p.get("open")));
 }
 
 function writeStateToUrl() {
   const p = new URLSearchParams();
   if (state.search) p.set("q", state.search);
   FILTER_GROUPS.forEach(g => { if (state[g].size) p.set(g, [...state[g]].join(",")); });
-  if (state.open.size) p.set("open", [...state.open].sort((a, b) => a - b).join(","));
+  if (state.open.size) p.set("open", [...state.open].sort().join(","));
   const qs = p.toString();
   history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
   document.querySelectorAll(".archive-link").forEach(a => {
@@ -264,8 +290,8 @@ function applyFilters(datasets) {
 function setExpanded(card, expanded) {
   card.classList.toggle("expanded", expanded);
   card.querySelector(".dataset-toggle").setAttribute("aria-expanded", String(expanded));
-  const n = Number(card.dataset.number);
-  if (expanded) state.open.add(n); else state.open.delete(n);
+  const id = card.dataset.id;
+  if (expanded) state.open.add(id); else state.open.delete(id);
 }
 
 // Text the search box matches against: every text field, plus the
@@ -276,10 +302,10 @@ function searchTextOf(row) {
   return [...fields, ...endpoints].join(" ").toLowerCase();
 }
 
-// Scroll to card number n and put keyboard focus on its title. If the
-// search or filters hide that card, they are cleared first.
-function jumpToCard(datasets, n, searchInput) {
-  const target = datasets.find(ds => ds.number === n);
+// Scroll to the card with dataset id `id` and put keyboard focus on its
+// title. If the search or filters hide that card, they are cleared first.
+function jumpToCard(datasets, id, searchInput) {
+  const target = datasets.find(ds => ds.id === id);
   if (!target) return;
   if (target.card.hidden) {
     state.search = "";
@@ -311,6 +337,10 @@ async function init() {
   }
 
   const datasets = rows.map((row, i) => ({
+    // Card links and the URL use the dataset's id, so they keep pointing
+    // at the same dataset when datasets are added, removed or re-sorted.
+    // The number is only the "Dataset 001" label on the card.
+    id: row.id,
     number: i + 1,
     row,
     category: categoryOf(row),
@@ -333,18 +363,18 @@ async function init() {
     `<p class="status-message" id="noResults" hidden>
        No datasets match the current search and filters.</p>`;
   datasets.forEach(ds => {
-    ds.card = list.querySelector(`[data-number="${ds.number}"]`);
+    ds.card = list.querySelector(`[data-id="${ds.id}"]`);
   });
 
-  // Restore state from the URL. A "#dataset-N" hash (used by the links on
+  // Restore state from the URL. A "#dataset-<id>" hash (used by the links on
   // the archive page) scrolls to that card; read it now, because
   // writeStateToUrl() rewrites the address without it.
   readStateFromUrl();
-  const jumpTo = Number((location.hash.match(/^#dataset-(\d+)$/) || [])[1]);
+  const jumpTo = (location.hash.match(/^#dataset-([a-z0-9-]+)$/) || [])[1];
   const searchInput = document.getElementById("searchInput");
   searchInput.value = state.search;
   datasets.forEach(ds => {
-    if (state.open.has(ds.number)) setExpanded(ds.card, true);
+    if (state.open.has(ds.id)) setExpanded(ds.card, true);
   });
   applyFilters(datasets);
   jumpToCard(datasets, jumpTo, searchInput);

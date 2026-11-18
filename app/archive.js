@@ -142,26 +142,25 @@ function buildTabs(archive, selected) {
 // Link to one dataset on the dashboard: the dashboard comes back as it
 // was, with this dataset's card also open, and scrolls to that card
 // (see jumpToCard in app.js).
-function datasetHref(number) {
+function datasetHref(id) {
   const p = new URLSearchParams(backQuery);
   const open = new Set((p.get("open") || "").split(",").filter(Boolean));
-  open.add(String(number));
-  p.set("open", [...open].sort((a, b) => a - b).join(","));
-  return `index.html?${p}#dataset-${number}`;
+  open.add(id);
+  p.set("open", [...open].sort().join(","));
+  return `index.html?${p}#dataset-${id}`;
 }
 
 function showDatasets(archive, rows, archives) {
   const matches = rows
-    .map((row, i) => ({ row, number: i + 1 }))   // number = card number on the dashboard
-    .filter(({ row }) => splitArchiveNames(row.data_archive)
+    .filter(row => splitArchiveNames(row.data_archive)
       .some(name => findArchive(archives, name) === archive));
 
   $("archiveDatasetCount").textContent =
     `${matches.length} ${matches.length === 1 ? "DATASET" : "DATASETS"} ON THE DASHBOARD`;
   if (matches.length === 0) return;
 
-  $("archiveDatasetList").innerHTML = matches.map(({ row, number }) => `
-    <li><a href="${escapeHtml(datasetHref(number))}">${escapeHtml(row.name)}</a>
+  $("archiveDatasetList").innerHTML = matches.map(row => `
+    <li><a href="${escapeHtml(datasetHref(row.id))}">${escapeHtml(row.name)}</a>
       <span class="archive-dataset-archives">${escapeHtml(row.data_archive)}</span></li>`).join("");
   $("archiveDatasets").hidden = false;
 }

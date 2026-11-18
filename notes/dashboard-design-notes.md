@@ -11,6 +11,7 @@ access links and more metadata is coming). Shape:
     "name": "...", "data_archive": "...", "precipitation_basis": "...",
     "period_of_record": "...", "formal_cdr": "...", "update_status": "...",
     "spatial_coverage": "...", "resolution": "...", "temporal_frequency": "...",
+    "curator": "...", "email": "", "doi": "", "notes": "...",
     "access_endpoints": [
       { "name": "DWD/GPCC archive", "url": "https://...", "role": "primary" },
       { "name": "NOAA PSL mirror",  "url": "https://...", "role": "mirror" } ]
@@ -18,12 +19,37 @@ access links and more metadata is coming). Shape:
 ```
 
 - `role` is `primary`, `alternative` or `mirror`; it's stored but not shown yet.
-- `id` is a stable slug of the name (not used by the page yet; a good key for
-  the future dataset page and for URLs instead of the card number).
+- `id` is a stable slug of the name and must be unique and use only
+  lowercase letters, digits and hyphens. The page uses it for the `open`
+  URL parameter, the `#dataset-<id>` jump, the card's `id="dataset-<id>"`
+  and the panel's `id="details-<id>"`. A good key for the future dataset
+  page too.
 - Endpoints came from `my_docs/about_data/Data archives by dataset.md`
   (links only; archives listed there without a link were left out). Tracking
   `utm_` parameters were removed. One-time build script:
   `.work/build_json.py` (not in git).
+- `curator`, `email`, `doi`, `notes` (added 2026-11-18) come from the user's
+  `my_docs/about_data/master_climate_inventory_subset.json`, merged by
+  `.work/merge_inventory.py` (not in git). Matching used a hand-made list of
+  inventory id → dataset id, because URL matching linked only 4 of 14 and two
+  wrongly. Matched datasets kept all their existing values; the inventory URL
+  was added as an `alternative` endpoint when new. Four inventory entries
+  became new datasets (TerraClimate, WorldClim, CMAP, CoCoRaHS) with
+  blank basis/CDR/update/resolution/frequency for the user to fill in.
+  DS-234 ("GPCC") was added, then dropped as a duplicate of the existing
+  GPCC datasets. CHIRPS notes had "50°S-50°N land" removed (wrong for v3).
+  `email` is deliberately blank everywhere: the site is public; the user
+  plans to fill it in for a password-protected site later. Every dataset has
+  all four keys ("" when unknown). The panel shows Curator, Contact email
+  (mailto link) and DOI (doi.org link) in the metadata grid, and a Notes
+  section after it.
+- Order (since 2026-11-18): datasets are sorted by data-source tag, then
+  coverage tag (both alphabetical by label), then name, so the dashboard
+  opens grouped. `.work/sort_datasets.py` (not in git) re-sorts; it copies
+  the tag rules from app.js, so update both if the rules change. The
+  "Dataset 001" card number follows the file order; links use ids, so
+  re-sorting doesn't break them (links made before 2026-11-18 used
+  numbers and no longer open a card).
 - New fields: add them to each dataset object; to show one in the panel, add
   it to `COL` and `METADATA_FIELDS` in app.js. Search covers every text field
   plus endpoint names and URLs.
@@ -158,11 +184,11 @@ there. First one: NOAA NCEI, from the user's research answer
   Wide tables scroll sideways inside their own box on phones. Content is
   indented 40px on desktop (user's request), 16px on phones.
 - **Dataset links on the archive page** go to
-  `index.html?<saved dashboard state, with N added to open>#dataset-N`. The
+  `index.html?<saved dashboard state, with the id added to open>#dataset-<id>`. The
   dashboard opens that card, scrolls it to the top of the screen and puts
   focus on its title (`jumpToCard` in app.js). If the saved search or
   filters would hide the card, they are cleared first. Each card has
-  `id="dataset-N"` (N = card number).
+  `id="dataset-<id>"` (the dataset's `id` from datasets.json).
 - **More pages**: with two or more pages in `pages`, tabs appear above the
   text (WAI-ARIA tabs: arrow keys, Home/End); the chosen tab is in the URL
   as `&page=`. Tested with a temporary second page.

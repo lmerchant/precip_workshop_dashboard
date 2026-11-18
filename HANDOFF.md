@@ -1,6 +1,6 @@
 # Handoff — Precipitation Workshop Dashboard
 
-_Last updated: 2026-11-17 (end of session 4)_
+_Last updated: 2026-11-18 (session 5)_
 
 ## What exists
 
@@ -18,7 +18,7 @@ _Last updated: 2026-11-17 (end of session 4)_
   - `content/archives/<id>/` — per archive page: `<page>.md` (text),
     `<page>.json` (research question + "searched on" list),
     `<page>.query.md` (R* query statement)
-  - `data/datasets.json` — the dataset data (41 datasets), including each
+  - `data/datasets.json` — the dataset data (45 datasets since session 5), including each
     dataset's `access_endpoints` list. This is now the file to edit; format in
     `notes/dashboard-design-notes.md`.
   - The old CSV now lives only in `my_docs/about_data/` (not in git).
@@ -88,7 +88,10 @@ was considered and set aside. Revisit when the dataset detail page is built.
   label text, white open panel, bright
   data-source tags with #434343 text. All text passes WCAG AA; details in
   `notes/dashboard-design-notes.md`.
-- Search, filters and open cards are stored in the URL (`?q=&category=a,b&coverage=&open=`),
+- Search, filters and open cards are stored in the URL
+  (`?q=&category=a,b&coverage=&open=<dataset id>,<dataset id>`; since
+  session 5 `open` and the `#dataset-<id>` jump use dataset ids, not card
+  numbers),
   which is the hook for restoring the dashboard after the future dataset page.
 
 - Archive pages (session 3): each dataset panel links its archive to an
@@ -141,6 +144,24 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Session log
 
+- Session 5 (2026-11-18): merged the user's
+  `my_docs/about_data/master_climate_inventory_subset.json` into
+  `datasets.json` (details in `notes/dashboard-design-notes.md`): 9 matched
+  datasets gained curator/doi/notes, 4 new datasets added, `email` key added
+  but left blank (public site). User's corrections: DS-136 (GPCP) note now
+  says "Global Precipitation Climatology Project"; DS-234 ("GPCC") dropped
+  as a duplicate; "50°S-50°N land" removed from the CHIRPS notes (v3 covers
+  60°S–60°N). Panel shows Curator, Contact email, DOI and Notes.
+  Then sorted `datasets.json` by data-source tag, coverage tag, then name
+  (`.work/sort_datasets.py`); archive-page links still open the right
+  cards (they number from the JSON order). Then switched URLs from card
+  numbers to dataset ids (`?open=chirps-v3,era5-global`,
+  `#dataset-chirps-v3`) in app.js and archive.js, so links survive
+  re-sorting; "Dataset 001" on the card is now only a display number.
+  Tested open/reload/archive-link round trip in the browser. The browser
+  pane kept a stale archive.js until a forced reload — remind the user to
+  hard-reload (Cmd+Shift+R) after JS changes.
+
 - Session 4 (2026-11-17): new colors from the user — page #D5E3EF (tried
   #C3DFF0 first), cards #E4EBF0, hover/open header #CAD8E3; card label
   text darkened #4A6575 → #46606F to keep 4.5:1 on the new hover color.
@@ -182,6 +203,15 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Next steps
 
+0a. Session 5 leftovers: the user fills the blanks in the 4 new datasets
+   (TerraClimate, WorldClim, CMAP, CoCoRaHS). Until
+   `precipitation_basis` is filled they all show as "Gauge-based" (the
+   category rule's fallback).
+
+0b. **Reminder for the user:** double-check the nClimGrid-Daily curator
+   "Kate Willett (NCEI)" with a colleague (Claude thought Kate Willett is at
+   the UK Met Office, not NCEI). Left as is for now.
+
 0. Ask whether the user wants a light-blue margin around the navy
    dashboard panel so the #D5E3EF page color shows on laptop-width windows.
 
@@ -195,6 +225,6 @@ was considered and set aside. Revisit when the dataset detail page is built.
    (import script + `archives.json`); decide which other
    `research-record.json` fields to use (e.g. a ratings summary in the
    dropdown).
-6. Consider showing endpoint `role` (e.g. a "Mirror" label) and using the
-   dataset `id` in URLs instead of the card number (card numbers shift when
-   a dataset is added or removed, which changes what `?open=` points to).
+6. Consider showing endpoint `role` (e.g. a "Mirror" label).
+   Every dataset needs a unique `id` (lowercase letters, digits, hyphens):
+   the URLs and card element ids use it.
