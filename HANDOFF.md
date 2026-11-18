@@ -1,6 +1,6 @@
 # Handoff — Precipitation Workshop Dashboard
 
-_Last updated: 2026-11-18 (session 5)_
+_Last updated: 2026-11-18 (end of session 5)_
 
 ## What exists
 
@@ -72,11 +72,14 @@ site is on GitHub Pages via the Actions workflow, which publishes `app/` as-is. 
 needed (it can build one page per dataset from the CSV). Next.js static export
 was considered and set aside. Revisit when the dataset detail page is built.
 
-## Current state (after session 4)
+## Current state (after session 5)
 
-- 41 datasets render as cards (the user removed a duplicate "PRISM" row);
-  click a card to open the detail panel, which ends with a "Data access
-  endpoints" table (name + link) for each dataset.
+- 45 datasets render as cards, sorted by data-source tag, coverage tag,
+  then name; click a card to open the detail panel: update status,
+  metadata grid (incl. Curator, Contact email, DOI), Notes, then a "Data
+  access endpoints" table (name + link). `email` and `doi` are blank for
+  now; 4 new datasets (TerraClimate, WorldClim, CMAP, CoCoRaHS) have
+  blanks the user will fill in.
 - Filters are derived from the data text (no category field exists):
   data source (Gauge-based / Satellite / Reanalysis / Merged) and coverage
   (CONUS / North America / Global land / Quasi-global / Global).
@@ -104,10 +107,10 @@ was considered and set aside. Revisit when the dataset detail page is built.
   or more pages per archive show as tabs (tested). Content indented 40px.
 - `app/` is self-contained; the only outside resource is Google Fonts (IBM
   Plex), which the user chose to keep.
-- Everything through session 4 is merged to `main`, pushed and live
-  (checked on the live site 2026-11-17: new colors and the 8 NCEI archive
-  links are there). `main`, `develop` and both remotes were at `99f8f1e`
-  before the session-4 handoff commit.
+- Everything through session 5's last code change is merged to `main` and
+  pushed by the user (2026-11-18): `main`, `develop` and both remotes were
+  at `7e65c64` before the session-5 handoff commit. Not checked on the
+  live site this session.
 
 ## Open questions for the user
 
@@ -161,6 +164,10 @@ was considered and set aside. Revisit when the dataset detail page is built.
   Tested open/reload/archive-link round trip in the browser. The browser
   pane kept a stale archive.js until a forced reload — remind the user to
   hard-reload (Cmd+Shift+R) after JS changes.
+  Then CoCoRaHS, CMAP, WorldClim and TerraClimate period of record
+  "-ongoing" → "-present" (user's request) so their tags read
+  "<year>–present"; the period tag also treats "ongoing" as present.
+  Commits `a733458`, `7e65c64`; the user merged to `main` and pushed.
 
 - Session 4 (2026-11-17): new colors from the user — page #D5E3EF (tried
   #C3DFF0 first), cards #E4EBF0, hover/open header #CAD8E3; card label
