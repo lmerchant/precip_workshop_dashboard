@@ -127,7 +127,9 @@ was considered and set aside. Revisit when the dataset detail page is built.
   "Searched on", then the report. No dataset list (no dataset field names
   an instrument). The NASA report's "earlier NOAA run" link opens the
   NOAA Satellites page.
-- Session 6 commits are on `develop` only, not merged to `main` or pushed.
+- Session 6's code is merged to `main` and pushed by the user (2026-11-18):
+  `main`, `origin/main` and `origin/develop` at `16943a7`. The handoff
+  commits after it are on `develop` only. Not checked on the live site.
 
 ## Open questions for the user
 
@@ -172,6 +174,7 @@ was considered and set aside. Revisit when the dataset detail page is built.
   query file; remove research-file references and relink the NASA → NOAA
   run link; one flat row of links. Left in the reports: "(read via
   WebFetch)" and "(subagent report)" notes (offered to remove; no answer).
+  The user merged and pushed through `16943a7`.
 
 - Session 5 (2026-11-18): merged the user's
   `my_docs/about_data/master_climate_inventory_subset.json` into
@@ -236,8 +239,9 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Next steps
 
-00. Publish session 6: the user merges `develop` into `main` and pushes
-   (command under "Working preferences").
+00. Session 6 is published (`16943a7`). Optionally check the R* metadata
+   row and instrument pages on the live site; the handoff commits reach
+   `main` with the next merge.
 01. Ask whether to remove "(read via WebFetch)" / "(subagent report)"
    notes from the instrument reports (import script could drop them).
 02. If instruments should list datasets, add an `instruments` field to
