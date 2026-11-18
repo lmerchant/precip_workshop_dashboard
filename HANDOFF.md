@@ -177,7 +177,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
   the Satellite group. The blank-field label "Not stated" → "NA" in
   `app.js` (the user asked for it "in the JSON", but the text only lived
   in the code; offered to write "NA" into the JSON, which would need the
-  category rule changed — no answer).
+  category rule changed — no answer). The user merged and pushed
+  through `f369813`.
 
 - Session 6 (2026-11-18): added the "R* metadata" row with the NCEI link
   (`a814f56` also holds the next item), then the NOAA Satellites and NASA
@@ -252,8 +253,9 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Next steps
 
-000. Session 7 (renames, GHCN-D, "NA") is on `develop` only; the user
-   merges to `main` and pushes to publish.
+000. Session 7 is published: the user merged and pushed through `f369813`
+   (2026-11-18). Optionally check the new names, GHCN-D and "NA" on the
+   live site.
 00. Session 6 is published (`16943a7`). Optionally check the R* metadata
    row and instrument pages on the live site; the handoff commits reach
    `main` with the next merge.
