@@ -359,6 +359,16 @@ async function init() {
   document.getElementById("coverageFilters").innerHTML =
     filterButtonsHtml("coverage", COVERAGES, datasets);
 
+  // "R* metadata" row: one link per archive or instrument page. The archive-link class
+  // makes writeStateToUrl() keep the href carrying the dashboard state.
+  if (archives.length) {
+    document.getElementById("rstarLinks").innerHTML = archives.map(a =>
+      `<li><a class="archive-link" data-archive="${escapeHtml(a.id)}"
+         href="${escapeHtml(archiveHref(a.id))}">${escapeHtml(a.name)} — about this ${a.kind === "instrument" ? "instrument" : "archive"}</a></li>`
+    ).join("");
+    document.getElementById("rstarGroup").hidden = false;
+  }
+
   list.innerHTML = datasets.map(cardHtml).join("") +
     `<p class="status-message" id="noResults" hidden>
        No datasets match the current search and filters.</p>`;

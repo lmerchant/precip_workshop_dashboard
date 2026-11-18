@@ -194,3 +194,26 @@ there. First one: NOAA NCEI, from the user's research answer
   as `&page=`. Tested with a temporary second page.
 - Data and page files are fetched with `cache: "no-cache"`, so an edited
   file shows after a normal reload (CSS/JS still need Cmd+Shift+R).
+
+### R* metadata row and instrument pages (2026-11-18, session 6)
+
+- The dashboard has an "R* metadata" row under the coverage filters: one
+  link per entry in `archives.json` ("<name> — about this archive" or
+  "— about this instrument"), carrying the dashboard state like the panel
+  links do.
+- Instruments (NOAA Satellites, NASA Satellites, from the A4 R* query)
+  are entries in `archives.json` with `"kind": "instrument"` and an empty
+  `data_archive_names`; their files are in `content/instruments/<id>/`.
+  They use `archive.html`, labelled "Instrument", with no "Datasets" list
+  (no dataset field names an instrument yet). The NCEI entry has
+  `"kind": "archive"`.
+- Their R* query box text is the user's ("[Dependent infrastructure
+  resilience]" / "Observation network or sensor platform at risk" / the
+  description), written by hand to `<page>.query.md`, since the A4
+  folders have no `rstar_query.md`.
+- Import script additions: drops sentences naming research-project files
+  (`results.csv`, `check-by-hand.md`, `sites-to-trust.md`, ...) and the
+  "- Pages to check by hand" item; `--replace OLD NEW` rewrites text, used
+  to point the NASA answer's "earlier NOAA run" link at
+  `archive.html?id=noaa-satellites`. Links in a page to another
+  `archive.html?...` page get the dashboard state added.

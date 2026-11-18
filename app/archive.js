@@ -4,6 +4,9 @@
  * Markdown file under content/), as tabs once there are two or more, and
  * lists the dashboard datasets held in that archive.
  *
+ * Entries with "kind": "instrument" (e.g. NOAA Satellites) use the same
+ * page, labelled "Instrument", without the dataset list.
+ *
  * The dashboard's own parameters (q, category, coverage, open) ride along
  * in this page's URL, so "Back to dashboard" returns to the same search,
  * filters and open cards.
@@ -14,6 +17,12 @@ const archiveId = params.get("id") || "";
 const backQuery = dashboardQuery(location.search);
 
 const $ = id => document.getElementById(id);
+
+// Words for the page's labels, by the entry's "kind" in archives.json.
+const KIND_LABELS = {
+  archive: { title: "Data archive", noun: "archive" },
+  instrument: { title: "Instrument", noun: "instrument" },
+};
 
 function formatDate(iso) {
   const d = new Date(`${iso}T00:00:00`);
@@ -47,6 +56,13 @@ async function showPage(archive, page) {
     : "";
   // renderMarkdown escapes the file's text before adding markup.
   panel.innerHTML = `<article class="prose">${date}${renderMarkdown(text, { headingOffset: 1 })}</article>`;
+  // Links in the text to another archive page keep the dashboard state,
+  // so "Back to dashboard" still returns to the same view from there.
+  if (backQuery) {
+    panel.querySelectorAll('a[href^="archive.html?"]').forEach(a => {
+      a.href = `${a.getAttribute("href")}&${backQuery}`;
+    });
+  }
 
   // Under the page's title (its first <h2>): the R* query the research
   // started from, then the research question and what was searched.
@@ -187,11 +203,15 @@ async function init() {
     return;
   }
 
+  const kind = KIND_LABELS[archive.kind] || KIND_LABELS.archive;
   document.title = `${archive.name} — Precipitation Workshop Datasets`;
+  $("kindLabel").textContent = `Precipitation workshop / ${kind.title}`;
+  $("archiveTabs").setAttribute("aria-label", `Pages about this ${kind.noun}`);
   $("archiveTitle").textContent = archive.name;
   $("archiveFullName").textContent = archive.full_name || "";
   const n = archive.pages.length;
-  $("archivePageCount").textContent = `${n} ${n === 1 ? "PAGE" : "PAGES"} ABOUT THIS ARCHIVE`;
+  $("archivePageCount").textContent =
+    `${n} ${n === 1 ? "PAGE" : "PAGES"} ABOUT THIS ${kind.noun.toUpperCase()}`;
 
   const selected = archive.pages.find(p => p.id === params.get("page")) || archive.pages[0];
   if (!selected) {
@@ -203,6 +223,8 @@ async function init() {
   }
 
   // The dataset list is extra; the page still works without it.
+  // Instruments have no dataset field to match on yet, so no list.
+  if (archive.kind === "instrument") return;
   try {
     showDatasets(archive, (await fetchJson(DATA_PATH)).datasets, archives);
   } catch {

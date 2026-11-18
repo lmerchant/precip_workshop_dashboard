@@ -256,6 +256,17 @@ body {
   color: #FFFFFF;
 }
 
+/* "R* metadata" row: links to the archive pages */
+.rstar-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  font-size: 14px;
+}
+
 .filter-count {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 11px;

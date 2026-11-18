@@ -7,6 +7,11 @@ drops those parts:
   - the closing "Saved in ..." paragraph and anything after it
   - list items that point to the research project's own files
     (see DROP_ITEM_PREFIXES)
+  - sentences that name one of those files, e.g. "Each figure's file and
+    passage is in `results.csv`." (see RESEARCH_FILES)
+
+With --replace OLD NEW (repeatable), each OLD text is replaced by NEW
+after cleaning, e.g. to point a link at another dashboard page.
 
 With --record, it also reads the answer's research-record.json and writes
 the fields the page shows to a small JSON file next to DEST (same name,
@@ -21,7 +26,8 @@ With --query, it copies the R* query statement the research started from
 Usage (from the project folder):
 
     python3 scripts/import_archive_page.py SOURCE.md DEST.md \
-      [--record research-record.json] [--query rstar_query.md]
+      [--record research-record.json] [--query rstar_query.md] \
+      [--replace OLD NEW ...]
 
 Example:
 
@@ -38,6 +44,7 @@ app/data/archives.json ("file" for the .md, "record" for the .json,
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -48,7 +55,20 @@ STOP_PREFIX = "Saved in "
 DROP_ITEM_PREFIXES = (
     "- **Pages to check by hand:**",
     "- **Sites to trust:**",
+    "- Pages to check by hand",
 )
+
+# Files that exist only in the research project. A sentence that names
+# one of them (in backticks) is dropped.
+RESEARCH_FILES = ("results.csv", "check-by-hand.md", "sites-to-trust.md", "left-out.md", "method.md")
+_FILE_SENTENCE = re.compile(
+    r"\s*[^.]*`(?:" + "|".join(re.escape(f) for f in RESEARCH_FILES) + r")`(?:[^.(]|\([^)]*\))*\."
+)
+
+
+def drop_file_sentences(line: str) -> str:
+    """Remove the sentences in one line that name a research-project file."""
+    return _FILE_SENTENCE.sub("", line)
 
 
 def clean(text: str) -> str:
@@ -58,7 +78,7 @@ def clean(text: str) -> str:
             break
         if line.lstrip().startswith(DROP_ITEM_PREFIXES):
             continue
-        kept.append(line)
+        kept.append(drop_file_sentences(line))
     return "\n".join(kept).rstrip() + "\n"
 
 
@@ -75,9 +95,15 @@ def main() -> int:
     parser.add_argument("dest", type=Path, help="where to write it under app/content/")
     parser.add_argument("--record", type=Path, help="the answer's research-record.json")
     parser.add_argument("--query", type=Path, help="the R* query statement (rstar_query.md)")
+    parser.add_argument("--replace", nargs=2, action="append", default=[], metavar=("OLD", "NEW"),
+                        help="replace OLD with NEW in the copied page (repeatable)")
     args = parser.parse_args()
 
     cleaned = clean(args.source.read_text(encoding="utf-8"))
+    for old, new in args.replace:
+        if old not in cleaned:
+            print(f"Warning: --replace text not found: {old}", file=sys.stderr)
+        cleaned = cleaned.replace(old, new)
     args.dest.parent.mkdir(parents=True, exist_ok=True)
     args.dest.write_text(cleaned, encoding="utf-8")
     print(f"Wrote {args.dest} ({len(cleaned.splitlines())} lines)")
