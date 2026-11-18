@@ -108,7 +108,7 @@ function shortPeriod(text) {
   const years = (text.match(/\b(1[89]\d\d|20\d\d)\b/g) || []).map(Number);
   if (years.length === 0) return text;
   const start = years[0];
-  const ongoing = /present|onward|most recent/i.test(text);
+  const ongoing = /present|onward|ongoing|most recent/i.test(text);
   const end = ongoing ? "present" : Math.max(...years);
   return start === end ? String(start) : `${start}–${end}`;
 }
