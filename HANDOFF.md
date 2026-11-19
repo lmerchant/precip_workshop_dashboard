@@ -1,6 +1,6 @@
 # Handoff — Precipitation Workshop Dashboard
 
-_Last updated: 2026-11-19 (session 8, in progress)_
+_Last updated: 2026-11-19 (end of session 8)_
 
 ## What exists
 
@@ -82,12 +82,14 @@ site is on GitHub Pages via the Actions workflow, which publishes `app/` as-is. 
 needed (it can build one page per dataset from the CSV). Next.js static export
 was considered and set aside. Revisit when the dataset detail page is built.
 
-## Current state (after session 7)
+## Current state (after session 8)
 
 - 46 datasets render as cards, sorted by data-source tag, coverage tag,
   then name (re-sort with `python3 .work/sort_datasets.py` after any
-  rename or new dataset); click a card to open the detail panel: update status,
-  metadata grid (incl. Curator, Contact email, DOI), Notes, then a "Data
+  rename or new dataset); click a card to open the detail panel: "Dataset"
+  (full name + "About dataset", NA until the dataset has an `about_url`),
+  update status, metadata grid (incl. Curator, Contact email, DOI), a
+  "Data archive(s)" table (Archive / About), Notes, then a "Data
   access endpoints" table (name + link). `email` and `doi` are blank for
   now; 4 new datasets (TerraClimate, WorldClim, CMAP, CoCoRaHS) have
   blanks the user will fill in. Blank fields show "NA" in the panel
@@ -109,9 +111,12 @@ was considered and set aside. Revisit when the dataset detail page is built.
   numbers),
   which is the hook for restoring the dashboard after the future dataset page.
 
-- Archive pages (session 3): each dataset panel links its archive to an
-  archive page when one exists ("NOAA NCEI — about this archive"; 8
-  datasets). The NCEI page (`archive.html?id=noaa-ncei`) shows, under the
+- Archive pages (session 3): in each dataset panel's "Data archive(s)"
+  table, the Archive column links each name to the archive's website
+  (`archive_links.json`; only NOAA NCEI filled in, blanks show as `#`
+  links) and the About column has "About archive" when the archive has a
+  page (NOAA NCEI; 10 datasets), else NA. That link carries the search,
+  filters and only that card as `open`. The NCEI page (`archive.html?id=noaa-ncei`) shows, under the
   report title: the R* query box, "**Question:**" and a "Searched on" list,
   then the threat-assessment report; at the bottom a "Datasets in this
   archive" list whose links open and scroll to that card on the dashboard.
@@ -122,8 +127,7 @@ was considered and set aside. Revisit when the dataset detail page is built.
 - "R* metadata" row (session 6) under the coverage filters: one link per
   `archives.json` entry — NOAA NCEI (archive), NOAA Satellites, NASA
   Satellites, NOAA Rain Gauges (instruments, "— about this instrument").
-  Links carry the dashboard state. The NCEI links in the dataset panels
-  are still there.
+  Links carry the full dashboard state (every open card).
 - Instrument pages: same layout as the NCEI page, header label
   "Instrument", subtitle the agency's full name, R* query box with the
   user's A4 text ("[Dependent infrastructure resilience]" / "Observation
@@ -131,9 +135,9 @@ was considered and set aside. Revisit when the dataset detail page is built.
   "Searched on", then the report. No dataset list (no dataset field names
   an instrument). The NASA report's "earlier NOAA run" link opens the
   NOAA Satellites page.
-- Session 6's code is merged to `main` and pushed by the user (2026-11-18):
-  `main`, `origin/main` and `origin/develop` at `16943a7`. The handoff
-  commits after it are on `develop` only. Not checked on the live site.
+- Session 8's code is merged to `main` and pushed by the user (2026-11-19):
+  `main`, `origin/main` and `origin/develop` at `43f901f`. The handoff
+  commit after it is on `develop` only. Not checked on the live site.
 
 ## Open questions for the user
 
@@ -178,7 +182,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
   now carry only that card as `open` (search/filters kept); stale open ids
   like `21` are dropped. CoCoRaHS `data_archive` → "NOAA NCEI; Colorado
   Climate Center" (its endpoint name still reads "NOAA / NCEI / Colorado
-  Climate Center"). Not committed yet.
+  Climate Center"). Commit `43f901f`; the user merged to `main` and
+  pushed it.
 
 - Session 7 (2026-11-18): the user renamed every dataset in
   `datasets.json` (e.g. "ERA5 — global" → "ERA5: fifth generation ECMWF
@@ -266,9 +271,12 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Next steps
 
-0000. Session 8: the user fills in URLs in `app/data/archive_links.json`;
-   add `about_url` to each dataset in `datasets.json` when the user's
-   dataset pages exist (the panel then shows an "About dataset" link).
+0000. Session 8 is published (`43f901f`). Next: the user fills in URLs in
+   `app/data/archive_links.json` (add any new archive name there when
+   adding a dataset); add `about_url` to each dataset in `datasets.json`
+   when the user's dataset pages (another project) exist — the panel then
+   shows an "About dataset" link. Optionally check the panels on the live
+   site.
 
 000. Session 7 is published: the user merged and pushed through `f369813`
    (2026-11-18). Optionally check the new names, GHCN-D and "NA" on the
