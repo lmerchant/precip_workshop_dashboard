@@ -170,13 +170,25 @@ there. First one: NOAA NCEI, from the user's research answer
      with a teal left rule; its `###` heading becomes an `<h3>`, styled
      like the other h3s (18px; h2 is 24px, body 15px) but with no top rule;
   2. "**Question:** <question>" and a "Searched on" list (from `record`).
-- **Dropdown link**: in the metadata grid, each archive in "Data archive(s)"
-  that has a page is a link "NOAA NCEI — about this archive"; the others stay
-  plain text. 8 datasets link to NCEI (6 NCEI only, 2 with a second archive).
-- **Back to the dashboard**: the link carries the dashboard's `q`,
-  `category`, `coverage` and `open` parameters (kept up to date as the user
-  searches or opens cards); the archive page's "← Back to dashboard" sends
-  them back, so the dashboard looks as it did.
+- **Dropdown links** (changed 2026-11-19, session 8): "Data archive(s)" is
+  its own section under the metadata grid (no longer a grid item): a table
+  styled like the endpoints table, columns "Archive" and "About", one row
+  per archive name. "Archive" links to the archive's website from
+  `app/data/archive_links.json` (`{ "archive_links": { "<name>": "<url>" } }`,
+  one key per name used in `data_archive`; blank = `href="#"` placeholder
+  that doesn't jump). "About" is an "About archive" link to the archive's
+  page, or "NA" if it has none. 10 datasets link to NCEI. Add new archive
+  names to `archive_links.json` when adding datasets.
+- **Back to the dashboard**: "About archive" links in a dataset panel carry
+  the dashboard's `q`, `category`, `coverage` and `open=<that dataset only>`
+  (user's request, session 8); the "R* metadata" row links carry every open
+  card. The archive page's "← Back to dashboard" sends them back. Open-card
+  ids that match no dataset (old card numbers like `21`) are dropped on load.
+- **Dataset block** (session 8): each panel starts with an h4 "Dataset", the
+  full name (to copy) and "About dataset": a link to the dataset's
+  optional `about_url` field in `datasets.json`, or "About dataset: NA" when
+  it's missing/blank (the user's dataset pages come from another project);
+  "Update status" is an h5.
 - **Archive page layout**: same navy header as the dashboard (archive name,
   full name, dataset and page counts); white panel with "As of <date>" and
   the Markdown text (its `#` title becomes the page's `<h2>`, so the

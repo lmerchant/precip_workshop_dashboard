@@ -482,6 +482,10 @@ body {
   margin: 0 0 8px;
 }
 
+.details-heading.details-subheading {
+  margin-top: 18px;
+}
+
 .details-heading.caps {
   font-size: 13px;
   letter-spacing: 0.6px;
@@ -570,6 +574,13 @@ body {
 
 .endpoints-table a:hover {
   color: var(--link-hover);
+}
+
+/* The "Data archive(s)" table uses the same look; its links are names,
+   not addresses, so they keep the body font. */
+.archives-table a {
+  font-family: inherit;
+  font-weight: 500;
 }
 
 

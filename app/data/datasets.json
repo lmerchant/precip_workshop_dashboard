@@ -3,7 +3,7 @@
     {
       "id": "cocorahs-community-collaborative-rain-hail-and-snow-network",
       "name": "CoCoRaHS - Community Collaborative Rain, Hail and Snow Network",
-      "data_archive": "NOAA / NCEI / Colorado Climate Center",
+      "data_archive": "NOAA NCEI; Colorado Climate Center",
       "precipitation_basis": "",
       "period_of_record": "1998-present",
       "formal_cdr": "",

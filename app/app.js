@@ -13,6 +13,11 @@
 // by init(); stays empty if that file can't be loaded.
 let archives = [];
 
+// Website for each archive name (from data/archive_links.json), e.g.
+// { "NOAA NCEI": "https://www.ncei.noaa.gov/" }. A blank or missing
+// address shows as a "#" placeholder link.
+let archiveLinks = {};
+
 // Field names in datasets.json, in one place so a renamed field is a
 // one-line change. Each dataset also has an "access_endpoints" list of
 // { name, url, role } objects (role: primary, alternative or mirror).
@@ -30,11 +35,14 @@ const COL = {
   email: "email",
   doi: "doi",
   notes: "notes",
+  // Address of the dataset's "About dataset" page (optional; the pages
+  // are being made in another project). Without it the panel shows NA.
+  about: "about_url",
 };
 
 // Fields shown in the metadata grid of the detail panel, in order.
+// The data archive(s) have their own table below the grid.
 const METADATA_FIELDS = [
-  ["Data archive(s)", COL.archive],
   ["Period of record", COL.period],
   ["Spatial coverage", COL.coverage],
   ["Resolution", COL.resolution],
@@ -49,7 +57,6 @@ const METADATA_FIELDS = [
 // an email becomes a mailto link and a DOI a doi.org link.
 function metadataValueHtml(col, value) {
   const e = escapeHtml;
-  if (col === COL.archive) return archiveNamesHtml(value);
   if (!value) return "NA";
   if (col === COL.email) return `<a href="mailto:${e(value)}">${e(value)}</a>`;
   if (col === COL.doi) {
@@ -120,24 +127,51 @@ const pad3 = n => String(n).padStart(3, "0");
 // Link text for an endpoint: the address without "https://" or a trailing "/".
 const displayUrl = url => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
-// The "Data archive(s)" value: each archive that has its own page is a
-// link to it; the others stay plain text. writeStateToUrl() keeps the
-// links' addresses up to date with the dashboard state.
-function archiveNamesHtml(text) {
+// The "Data archive(s)" section: a table with one row per archive name.
+// "Archive" links to the archive's website (from archive_links.json; "#"
+// until the address is filled in). "About" links to the archive's own
+// page when there is one ("NA" otherwise); that link carries only this
+// card as the open card (see archiveHref).
+function archivesTableHtml(text, datasetId) {
+  const e = escapeHtml;
   const names = splitArchiveNames(text);
-  if (names.length === 0) return "NA";
-  return names.map(name => {
-    const archive = findArchive(archives, name);
-    if (!archive) return escapeHtml(name);
-    return `<a class="archive-link" data-archive="${escapeHtml(archive.id)}"
-         href="${escapeHtml(archiveHref(archive.id))}">${escapeHtml(name)} — about this archive</a>`;
-  }).join("; ");
+  const rows = names.length === 0
+    ? `
+      <tr><td>NA</td><td>NA</td></tr>`
+    : names.map(name => {
+        const url = archiveLinks[name] || "#";
+        const archive = findArchive(archives, name);
+        const about = archive
+          ? `<a class="archive-link" data-archive="${e(archive.id)}" data-dataset="${e(datasetId)}"
+               href="${e(archiveHref(archive.id, datasetId))}">About archive</a>`
+          : "NA";
+        return `
+      <tr>
+        <td><a href="${e(url)}">${e(name)}</a></td>
+        <td>${about}</td>
+      </tr>`;
+      }).join("");
+  return `
+          <div class="section-divider"></div>
+
+          <h4 class="details-heading caps">Data archive(s)</h4>
+          <table class="endpoints-table archives-table">
+            <thead>
+              <tr><th scope="col">Archive</th><th scope="col">About</th></tr>
+            </thead>
+            <tbody>${rows}
+            </tbody>
+          </table>`;
 }
 
-// Address of an archive page, carrying the dashboard's current state so
-// its "Back to dashboard" link returns here as things were.
-function archiveHref(id) {
-  const back = dashboardQuery(location.search);
+// Address of an archive page, carrying the dashboard's search and filters
+// so its "Back to dashboard" link returns here as things were. Links in a
+// dataset panel pass that dataset's id, and only that card is sent as
+// open; the "R* metadata" links send every open card.
+function archiveHref(id, datasetId) {
+  const p = new URLSearchParams(dashboardQuery(location.search));
+  if (datasetId) p.set("open", datasetId);
+  const back = p.toString();
   return `archive.html?id=${encodeURIComponent(id)}${back ? `&${back}` : ""}`;
 }
 
@@ -197,13 +231,20 @@ function cardHtml(ds) {
     <div class="dataset-details" id="${panelId}">
       <div class="details-inner">
         <div class="details-content">
-          <h4 class="details-heading">Update status</h4>
+          <h4 class="details-heading">Dataset</h4>
+          <p class="details-description dataset-full-name">${e(r[COL.name])}</p>
+          <p class="details-description">${r[COL.about]
+            ? `<a class="dataset-about-link" href="${e(r[COL.about])}">About dataset</a>`
+            : "About dataset: NA"}</p>
+
+          <h5 class="details-heading details-subheading">Update status</h5>
           <p class="details-description">${e(r[COL.update] || "NA")}</p>
 
           <div class="section-divider"></div>
 
           <h4 class="details-heading caps">Dataset metadata</h4>
           <dl class="metadata-grid">${metadata}</dl>
+${archivesTableHtml(r[COL.archive], ds.id)}
 
           <div class="section-divider"></div>
 
@@ -254,7 +295,7 @@ function writeStateToUrl() {
   const qs = p.toString();
   history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
   document.querySelectorAll(".archive-link").forEach(a => {
-    a.href = archiveHref(a.dataset.archive);
+    a.href = archiveHref(a.dataset.archive, a.dataset.dataset);
   });
 }
 
@@ -335,6 +376,11 @@ async function init() {
   } catch {
     archives = [];
   }
+  try {
+    archiveLinks = (await fetchJson(ARCHIVE_LINKS_PATH)).archive_links || {};
+  } catch {
+    archiveLinks = {};
+  }
 
   const datasets = rows.map((row, i) => ({
     // Card links and the URL use the dataset's id, so they keep pointing
@@ -380,6 +426,11 @@ async function init() {
   // the archive page) scrolls to that card; read it now, because
   // writeStateToUrl() rewrites the address without it.
   readStateFromUrl();
+  // Drop open-card ids that match no dataset (e.g. card numbers such as
+  // "21" left in old bookmarks from before ids were used), so they stop
+  // riding along in the archive-page links.
+  const knownIds = new Set(datasets.map(ds => ds.id));
+  state.open = new Set([...state.open].filter(id => knownIds.has(id)));
   const jumpTo = (location.hash.match(/^#dataset-([a-z0-9-]+)$/) || [])[1];
   const searchInput = document.getElementById("searchInput");
   searchInput.value = state.search;
@@ -410,6 +461,11 @@ async function init() {
 
   // Expand / collapse dataset cards
   list.addEventListener("click", ev => {
+    // Archive websites not filled in yet (href="#"): don't jump to the top.
+    if (ev.target.closest('a[href="#"]')) {
+      ev.preventDefault();
+      return;
+    }
     const toggle = ev.target.closest(".dataset-toggle");
     if (!toggle) return;
     const card = toggle.closest(".dataset-card");
