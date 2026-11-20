@@ -4,6 +4,6 @@
     "How is GPCP Daily quality-controlled (checks, automated/manual, flags, who, input QC)?",
     "How is it validated, and what program reviews exist?",
     "What algorithms and software produce it, and is the code published (where, licence)?",
-    "What formats and access routes, and how FAIR is each?"
+    "What formats and access routes exist, and how FAIR is each?"
   ]
 }

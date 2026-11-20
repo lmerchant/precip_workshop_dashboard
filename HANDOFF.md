@@ -183,6 +183,16 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Session log
 
+- Session 12 (2026-11-20): GPCP Daily v3.3 part 6 "Satellites" added
+  (`dataset.html?id=gpcp-daily-v3-3&part=6`) from
+  `.../gpcp-daily/2026-11-20_gpcp-daily-satellites-pt6/`. Its
+  `query_questions.txt` "Searched on" lines were rewritten as questions
+  (original kept only in the chat's temp folder). Two new bullet labels
+  added to the import script's drop list (see the howto). The re-run also
+  picked up the user's own wording fixes in GPCP pt2 and PERSIANN pt2
+  question files. Checked in the browser: page, tables, part 5 → 6 link,
+  search.
+
 - Session 11 (2026-11-20): panel headings "Dataset" and "Notes" now use
   the caps style like the other section headings; "Dataset web research:"
   (NA case) is bold. Added a TEMPORARY IMERG page for a project meeting (remove it only
