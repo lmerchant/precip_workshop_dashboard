@@ -261,7 +261,8 @@
           "url": "https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily",
           "role": "alternative"
         }
-      ]
+      ],
+      "about_url": "dataset.html?id=ghcn-d"
     },
     {
       "id": "gpcc-first-guess-noaa-psl-mirror-dwd-gpcc-source",
@@ -833,7 +834,8 @@
           "url": "https://doi.org/10.25921/9b5m-ka77",
           "role": "primary"
         }
-      ]
+      ],
+      "about_url": "dataset.html?id=gpcp-daily-v3-3"
     },
     {
       "id": "gpcp-monthly-v3-3",
@@ -1088,7 +1090,8 @@
           "url": "https://chrsdata.eng.uci.edu",
           "role": "alternative"
         }
-      ]
+      ],
+      "about_url": "dataset.html?id=noaa-ncei-persiann-cdr-v1r1"
     },
     {
       "id": "trmm-gpm-v07b",

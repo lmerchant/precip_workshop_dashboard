@@ -9,6 +9,8 @@ drops those parts:
     (see DROP_ITEM_PREFIXES)
   - sentences that name one of those files, e.g. "Each figure's file and
     passage is in `results.csv`." (see RESEARCH_FILES)
+  - notes on how a source was read, e.g. "(read via WebFetch)"
+    (see scripts/research_text.py)
 
 With --replace OLD NEW (repeatable), each OLD text is replaced by NEW
 after cleaning, e.g. to point a link at another dashboard page.
@@ -48,6 +50,9 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from research_text import strip_tool_notes  # noqa: E402
+
 # A line starting with this ends the content we keep.
 STOP_PREFIX = "Saved in "
 
@@ -80,7 +85,7 @@ def clean(text: str) -> str:
         if line.lstrip().startswith(DROP_ITEM_PREFIXES):
             continue
         kept.append(drop_file_sentences(line))
-    return "\n".join(kept).rstrip() + "\n"
+    return strip_tool_notes("\n".join(kept).rstrip() + "\n")
 
 
 def record_fields(record: dict) -> dict:

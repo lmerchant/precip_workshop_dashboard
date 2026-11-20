@@ -5,6 +5,7 @@
 const DATA_PATH = "data/datasets.json";
 const ARCHIVES_PATH = "data/archives.json";
 const ARCHIVE_LINKS_PATH = "data/archive_links.json";
+const DATASET_PAGES_PATH = "data/dataset_pages.json";
 
 // Dashboard URL parameters. The archive page passes these back to
 // index.html, and drops anything else it was given.

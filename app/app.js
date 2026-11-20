@@ -175,6 +175,17 @@ function archiveHref(id, datasetId) {
   return `archive.html?id=${encodeURIComponent(id)}${back ? `&${back}` : ""}`;
 }
 
+// Link to a dataset's about page (its about_url). A page on this site
+// (dataset.html) gets the search and filters, with only this card as the
+// open card, so its "Back to dashboard" returns here; other addresses
+// are used as they are.
+function aboutHref(url, datasetId) {
+  if (!url.startsWith("dataset.html?")) return url;
+  const p = new URLSearchParams(dashboardQuery(location.search));
+  p.set("open", datasetId);
+  return `${url}&${p}`;
+}
+
 function endpointsHtml(endpoints) {
   const e = escapeHtml;
   if (!endpoints || endpoints.length === 0) return "";
@@ -234,7 +245,8 @@ function cardHtml(ds) {
           <h4 class="details-heading">Dataset</h4>
           <p class="details-description dataset-full-name">${e(r[COL.name])}</p>
           <p class="details-description">${r[COL.about]
-            ? `<a class="dataset-about-link" href="${e(r[COL.about])}">About dataset</a>`
+            ? `<a class="dataset-about-link" data-about="${e(r[COL.about])}" data-dataset="${e(ds.id)}"
+                 href="${e(aboutHref(r[COL.about], ds.id))}">About dataset</a>`
             : "About dataset: NA"}</p>
 
           <h5 class="details-heading details-subheading">Update status</h5>
@@ -296,6 +308,9 @@ function writeStateToUrl() {
   history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
   document.querySelectorAll(".archive-link").forEach(a => {
     a.href = archiveHref(a.dataset.archive, a.dataset.dataset);
+  });
+  document.querySelectorAll(".dataset-about-link").forEach(a => {
+    a.href = aboutHref(a.dataset.about, a.dataset.dataset);
   });
 }
 
