@@ -185,7 +185,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 - Session 11 (2026-11-20): panel headings "Dataset" and "Notes" now use
   the caps style like the other section headings; "Dataset web research:"
-  (NA case) is bold. Added a TEMPORARY IMERG page for a project meeting:
+  (NA case) is bold. Added a TEMPORARY IMERG page for a project meeting (remove it only
+  when the user says so; see Next steps):
   `app/imerg-overview.html`, hand-written HTML from
   `my_docs/about_data/IMERG_dataset_overview.md`, styled like the dataset
   web research pages (no search, not in `dataset_pages.json`). IMERG's
@@ -325,9 +326,12 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Next steps
 
-0000000. Temporary IMERG page: when IMERG gets proper web research, build
-   it with `notes/dataset-about-pages-howto.md`, then trash
-   `app/imerg-overview.html` (its header comment says the same).
+0000000. **The IMERG dataset page is TEMPORARY** (`app/imerg-overview.html`,
+   made for a project meeting). Keep it until the user says to remove
+   it; don't remove it before then. To remove it: trash the file, and
+   remove IMERG's `about_url` from `app/data/datasets.json` (or point it
+   at `dataset.html?id=imerg-final-run-v07` if IMERG has proper web
+   research by then, built with `notes/dataset-about-pages-howto.md`).
 
 000000. Session 10 (USCRN) is committed on `develop`; the user merges and
    pushes. Optionally confirm USCRN's data source ("Gauge-based", inferred)
