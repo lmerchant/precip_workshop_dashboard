@@ -98,12 +98,14 @@ async function researchScopeHtml(page) {
   } catch {
     return "";
   }
-  const question = rec.question
-    ? `<p class="research-question"><strong>Question:</strong> ${escapeHtml(rec.question)}</p>`
-    : "";
+  // Headings under the report's <h2> title: "Question" <h3>, "Searched
+  // on" <h4>, drawn at the same sizes as on the dataset pages.
+  const question = rec.question ? `
+    <h3 class="question-heading">Question</h3>
+    <p class="research-question">${escapeHtml(rec.question)}</p>` : "";
   const items = rec.searched_on || [];
   const searched = items.length ? `
-    <h3 class="searched-on-heading">Searched on</h3>
+    <h4 class="searched-on-heading">Searched on</h4>
     <ul class="searched-on">${items.map(q => `<li>${escapeHtml(q)}</li>`).join("")}</ul>` : "";
   return question || searched ? `<div class="research-scope">${question}${searched}</div>` : "";
 }

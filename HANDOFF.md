@@ -196,8 +196,10 @@ was considered and set aside. Revisit when the dataset detail page is built.
   (listed in the howto). Commit `9e49fc1`. Then, at the user's request:
   section h2s on the dataset pages 1.5rem; part pages open with a
   "Question" h2 + paragraph and a "Searched on" h3; "Searched on"
-  headings 1.1rem on the dataset pages (archive pages still 15px). The
-  user merges and pushes.
+  headings 1.1rem on the dataset pages. Then the archive and instrument
+  pages got the same Question/Searched on format and sizes ("Question"
+  h3 1.5rem + paragraph, "Searched on" h4 1.1rem, under the report's h2).
+  The user merges and pushes.
 
 - Session 8 (2026-11-19): each panel now opens with "Dataset" + full name +
   "About dataset: NA" (becomes a link once a dataset has an `about_url`;

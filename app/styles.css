@@ -747,8 +747,20 @@ body {
   border-bottom: 1px solid var(--divider);
 }
 
+/* Same sizes on the archive, instrument and dataset pages; the element
+   levels differ (h3/h4 under an archive report's h2 title, h2/h3 on a
+   dataset part page) so each page's headings stay in order. */
+.prose .question-heading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 12px;
+  padding-top: 0;
+  border-top: none;
+}
+
 .prose .searched-on-heading {
-  font-size: 15px;
+  font-size: 1.1rem;
+  font-weight: 600;
   margin: 16px 0 8px;
   padding-top: 0;
   border-top: none;
@@ -890,17 +902,9 @@ body {
   border-top: none;
 }
 
-.dataset-prose .research-scope .question-heading,
 .dataset-prose .research-part:first-child h2,
 .dataset-prose article > h2:first-child {
   margin-top: 0;
-  padding-top: 0;
-  border-top: none;
-}
-
-.dataset-prose .searched-on-heading {
-  font-size: 1.1rem;
-  margin: 16px 0 8px;
   padding-top: 0;
   border-top: none;
 }
