@@ -63,6 +63,20 @@ function questionsHtml(q, headingTag) {
   return question + searched;
 }
 
+// On a part's page: a "Question" <h2> with the question as a paragraph,
+// then a "Searched on" <h3> and list.
+function partQuestionsHtml(q) {
+  if (!q) return "";
+  const question = q.question ? `
+    <h2 class="question-heading">Question</h2>
+    <p class="research-question">${escapeHtml(q.question)}</p>` : "";
+  const items = q.searched_on || [];
+  const searched = items.length ? `
+    <h3 class="searched-on-heading">Searched on</h3>
+    <ul class="searched-on">${items.map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>` : "";
+  return question + searched;
+}
+
 async function loadQuestions(part) {
   try {
     return await fetchJson(partFile(part, "json"));
@@ -129,7 +143,7 @@ async function showPart(entry, names, part) {
   panel.innerHTML = `
     <div class="prose dataset-prose">
       <p class="summary-link"><a href="${escapeHtml(pageHref(null))}"><span aria-hidden="true">←</span> Back to ${escapeHtml(names.short)} web research</a></p>
-      <div class="research-scope">${questionsHtml(q, "h2")}</div>
+      <div class="research-scope">${partQuestionsHtml(q)}</div>
       <article>${renderMarkdown(text)}</article>
       ${nav}
     </div>`;

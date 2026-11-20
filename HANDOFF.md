@@ -1,6 +1,6 @@
 # Handoff — Precipitation Workshop Dashboard
 
-_Last updated: 2026-11-20 (session 9, in progress)_
+_Last updated: 2026-11-20 (end of session 9)_
 
 ## What exists
 
@@ -193,7 +193,11 @@ was considered and set aside. Revisit when the dataset detail page is built.
   review). Tool notes removed from the dataset pages and (user's answer to
   the session 6 question) from the archive/instrument pages too; a few
   sentences that discuss evidence quality still name WebFetch/subagent
-  (listed in the howto). Not committed yet.
+  (listed in the howto). Commit `9e49fc1`. Then, at the user's request:
+  section h2s on the dataset pages 1.5rem; part pages open with a
+  "Question" h2 + paragraph and a "Searched on" h3; "Searched on"
+  headings 1.1rem on the dataset pages (archive pages still 15px). The
+  user merges and pushes.
 
 - Session 8 (2026-11-19): each panel now opens with "Dataset" + full name +
   "About dataset: NA" (becomes a link once a dataset has an `about_url`;
@@ -293,8 +297,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Next steps
 
-00000. Session 9: commit the dataset about pages on `develop`; the user
-   merges and pushes. When more dataset research arrives, follow
+00000. Session 9 is committed on `develop`; the user merges and pushes.
+   Optionally check the dataset pages on the live site. When more dataset research arrives, follow
    `notes/dataset-about-pages-howto.md`. Ask whether the remaining
    in-sentence WebFetch/subagent mentions should be reworded.
 

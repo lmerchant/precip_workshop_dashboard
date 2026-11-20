@@ -42,7 +42,8 @@ Second one?
     + ": <topic>" (part). Subtitle: the card name after ": " (none if no colon).
 - Summary: one `<section>` per part: `<h2>` topic, link "Read the web research: <topic>",
   Question, "Searched on" (`<h3>`) list.
-- Part: "← Back to <short name> web research" link, Question, "Searched on" (`<h2>`),
+- Part: "← Back to <short name> web research" link, "Question" `<h2>` with the
+  question as a paragraph, "Searched on" `<h3>` and list,
   the answer (its `##` sections render as `<h2>`), then previous/next links.
 - Every link between these pages carries the dashboard's q/category/coverage/open.
 
