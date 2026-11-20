@@ -176,11 +176,11 @@ function archiveHref(id, datasetId) {
 }
 
 // Link to a dataset's about page (its about_url). A page on this site
-// (dataset.html) gets the search and filters, with only this card as the
-// open card, so its "Back to dashboard" returns here; other addresses
-// are used as they are.
+// (dataset.html, or a temporary page such as imerg-overview.html) gets
+// the search and filters, with only this card as the open card, so its
+// "Back to dashboard" returns here; other addresses are used as they are.
 function aboutHref(url, datasetId) {
-  if (!url.startsWith("dataset.html?")) return url;
+  if (!/^[\w-]+\.html\?/.test(url)) return url;
   const p = new URLSearchParams(dashboardQuery(location.search));
   p.set("open", datasetId);
   return `${url}&${p}`;
@@ -242,12 +242,12 @@ function cardHtml(ds) {
     <div class="dataset-details" id="${panelId}">
       <div class="details-inner">
         <div class="details-content">
-          <h4 class="details-heading">Dataset</h4>
+          <h4 class="details-heading caps">Dataset</h4>
           <p class="details-description dataset-full-name">${e(r[COL.name])}</p>
           <p class="details-description">${r[COL.about]
             ? `<a class="dataset-about-link" data-about="${e(r[COL.about])}" data-dataset="${e(ds.id)}"
                  href="${e(aboutHref(r[COL.about], ds.id))}">Dataset web research</a>`
-            : "Dataset web research: NA"}</p>
+            : "<strong>Dataset web research:</strong> NA"}</p>
 
           <h5 class="details-heading details-subheading">Update status</h5>
           <p class="details-description">${e(r[COL.update] || "NA")}</p>
@@ -260,7 +260,7 @@ ${archivesTableHtml(r[COL.archive], ds.id)}
 
           <div class="section-divider"></div>
 
-          <h4 class="details-heading">Notes</h4>
+          <h4 class="details-heading caps">Notes</h4>
           <p class="details-description">${e(r[COL.notes] || "NA")}</p>
 ${endpointsHtml(r.access_endpoints)}
         </div>

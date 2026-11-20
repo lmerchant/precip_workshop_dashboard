@@ -183,6 +183,17 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Session log
 
+- Session 11 (2026-11-20): panel headings "Dataset" and "Notes" now use
+  the caps style like the other section headings; "Dataset web research:"
+  (NA case) is bold. Added a TEMPORARY IMERG page for a project meeting:
+  `app/imerg-overview.html`, hand-written HTML from
+  `my_docs/about_data/IMERG_dataset_overview.md`, styled like the dataset
+  web research pages (no search, not in `dataset_pages.json`). IMERG's
+  `about_url` is `imerg-overview.html?id=imerg-final-run-v07`;
+  `aboutHref` in `app.js` now adds dashboard state to any local
+  `*.html?` about link. One wording fix: "archive on GES DISC" →
+  "archived".
+
 - Session 10 (2026-11-20): added USCRN (id `uscrn-v2`, Gauge-based /
   CONUS, card 006) from the user's pasted table: 4 NCEI FTP endpoints
   (sub-hourly, hourly, daily, monthly; all `primary`), DOI
@@ -313,6 +324,10 @@ was considered and set aside. Revisit when the dataset detail page is built.
   first commits on `develop`.
 
 ## Next steps
+
+0000000. Temporary IMERG page: when IMERG gets proper web research, build
+   it with `notes/dataset-about-pages-howto.md`, then trash
+   `app/imerg-overview.html` (its header comment says the same).
 
 000000. Session 10 (USCRN) is committed on `develop`; the user merges and
    pushes. Optionally confirm USCRN's data source ("Gauge-based", inferred)

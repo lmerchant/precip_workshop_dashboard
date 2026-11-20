@@ -1003,7 +1003,8 @@
           "url": "https://gpm.nasa.gov/data/imerg",
           "role": "alternative"
         }
-      ]
+      ],
+      "about_url": "imerg-overview.html?id=imerg-final-run-v07"
     },
     {
       "id": "uci-chrs-pdir-now",

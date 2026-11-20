@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+    TEMPORARY page for a project meeting (added 2026-11-20). It holds the
+    IMERG overview from my_docs/about_data/IMERG_dataset_overview.md as
+    hand-written HTML and does not follow the dataset web research format
+    (dataset.html + dataset_pages.json). Replace it with a proper dataset
+    web research page later, then delete this file and point IMERG's
+    about_url in data/datasets.json at dataset.html?id=imerg-final-run-v07.
+  -->
+  <title>IMERG Final Run v07: Dataset overview — Precipitation Workshop Datasets</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<main class="dashboard">
+
+  <header class="dashboard-header archive-header">
+    <div class="header-top">
+      <a class="back-link" id="backLink" href="index.html?open=imerg-final-run-v07#dataset-imerg-final-run-v07">
+        <span aria-hidden="true">←</span> Back to dashboard
+      </a>
+      <span class="header-label">Precipitation workshop / Dataset</span>
+    </div>
+
+    <h1 class="dashboard-title">IMERG Final Run v07: Dataset overview</h1>
+
+    <p class="dashboard-description">Integrated Multi-satellitE Retrievals for GPM</p>
+
+    <div class="header-divider"></div>
+
+    <div class="header-meta">
+      <span>DATASET OVERVIEW</span>
+    </div>
+  </header>
+
+  <div class="content-panel archive-panel">
+    <div class="prose dataset-prose">
+      <article>
+
+        <h2>IMERG: Integrated Multi-satellitE Retrievals for GPM</h2>
+
+        <p><a href="https://gpm.nasa.gov/data/imerg" target="_blank" rel="noopener noreferrer">https://gpm.nasa.gov/data/imerg<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+
+        <p>NASA’s Integrated Multi-satellitE Retrievals for GPM (IMERG) product combines information from the GPM satellite constellation to estimate precipitation over the majority of the Earth’s surface.</p>
+
+        <p>IMERG fuses precipitation estimates collected during the TRMM satellite’s operation (1998–2015) with recent precipitation estimates collected by the GPM mission (2014–present), creating a continuous precipitation dataset spanning over two decades.</p>
+
+        <p>This extended record allows scientists to compare past and present precipitation trends, enabling more accurate climate and weather models and a better understanding of Earth’s water cycle and extreme precipitation events.</p>
+
+        <p>IMERG is available in near real-time with estimates of Earth’s precipitation <strong>updated every half-hour</strong>, enabling a wide range of applications to help communities around the world make informed decisions for disasters, disease, resource management, energy production, food security, and more.</p>
+
+        <p>IMERG is particularly valuable over areas of Earth’s surface that lack ground-based precipitation-measuring instruments, including oceans and remote areas.</p>
+
+        <h2>IMERG precipitation algorithm and the Global Precipitation Measurement (GPM) Mission</h2>
+
+        <p><a href="https://climatedataguide.ucar.edu/climate-data/gpm-global-precipitation-measurement-mission" target="_blank" rel="noopener noreferrer">https://climatedataguide.ucar.edu/climate-data/gpm-global-precipitation-measurement-mission<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+
+        <h3>Key Limitations</h3>
+
+        <p>The GPM constellation is a constellation of opportunity—using all sensors that are available—and IMERG is not a Climate Data Record.</p>
+
+        <p>As such, IMERG depends on a continuously varying “virtual constellation” of satellites of opportunity, currently some 11 microwave satellites operated by 6 agencies.</p>
+
+        <p>The <strong>temporal record may not be homogeneous</strong>. Users investigating time series behaviour (e.g. long-term trends, power spectra, etc.) should consider evaluating data products like <strong>GPCP, which emphasize temporal homogeneity</strong>.</p>
+
+        <p>IMERG data is archived on GES DISC, which is also available on the cloud via Amazon’s S3 access.</p>
+
+        <h3>Latency</h3>
+
+        <p>Recognizing that different users have different latency requirements, IMERG is produced in three “Runs”. By sacrificing or simplifying parts of the algorithm, IMERG precipitation estimates can be produced at near-real-time.</p>
+
+        <p>Significant data latency for the production of the “Final Run” IMERG data product.</p>
+
+        <h3>Suitability for Climate Research</h3>
+
+        <p>A long-term, near-global gridded precipitation dataset may be categorized as a High-Resolution Precipitation Product (HRPP), which strives to provide the best instantaneous precip estimates, or as a Climate Data Record (CDR), which emphasizes homogeneity over instantaneous accuracy.</p>
+
+        <p>The Integrated Multi-satellitE Retrievals for the Global Precipitation Measurement (GPM) mission (IMERG) is an HRPP, while the GPCP conforms to CDR standards.</p>
+
+        <p>Particularly early in the IMERG record, there were relatively few microwave satellites. The flip side of this is that the early part of the IMERG record has more dependence on microwave-calibrated IR estimates, and the IR coverage declines after the first few years. Such variations should steer users away from IMERG to the GPCP for climate studies.</p>
+
+        <p>One result that is nearly automatic is that the GPCP and IMERG agree rather closely at the monthly scale over most land areas because they both use the same GPCC monthly gauge analyses, and in similar ways.</p>
+
+        <p>The issue of the changing constellation of inputs is more problematic for trying to characterize time-varying climate parameters.</p>
+
+        <h2>IMERG Early, Late, and Final Run</h2>
+
+        <p><a href="https://gpm.nasa.gov/taxonomy/term/1357" target="_blank" rel="noopener noreferrer">https://gpm.nasa.gov/taxonomy/term/1357<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+
+        <p>Near real-time low-latency gridded global multi-satellite precipitation estimates.</p>
+
+        <p>The system is run several times for each observation time, first giving a quick estimate (IMERG Early Run) and successively providing better estimates as more data arrive (IMERG Late Run). The final step uses monthly gauge data to create research-level products (IMERG Final Run).</p>
+
+      </article>
+    </div>
+  </div>
+
+  <footer class="dashboard-footer">
+    PRECIPITATION WORKSHOP — 2026
+  </footer>
+
+</main>
+
+<script src="shared.js"></script>
+<script>
+  // "Back to dashboard" returns to the same search and filters, with the
+  // IMERG card open (the dashboard's parameters ride along in the URL).
+  (function () {
+    const id = "imerg-final-run-v07";
+    const p = new URLSearchParams(dashboardQuery(location.search));
+    const open = new Set((p.get("open") || "").split(",").filter(Boolean));
+    open.add(id);
+    p.set("open", [...open].sort().join(","));
+    document.getElementById("backLink").href = `index.html?${p}#dataset-${id}`;
+  })();
+</script>
+
+</body>
+</html>
