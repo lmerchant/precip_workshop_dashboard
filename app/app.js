@@ -35,8 +35,8 @@ const COL = {
   email: "email",
   doi: "doi",
   notes: "notes",
-  // Address of the dataset's "About dataset" page (optional; the pages
-  // are being made in another project). Without it the panel shows NA.
+  // Address of the dataset's "Dataset web research" page (optional; set by
+  // scripts/import_dataset_pages.py). Without it the panel shows NA.
   about: "about_url",
 };
 
@@ -246,8 +246,8 @@ function cardHtml(ds) {
           <p class="details-description dataset-full-name">${e(r[COL.name])}</p>
           <p class="details-description">${r[COL.about]
             ? `<a class="dataset-about-link" data-about="${e(r[COL.about])}" data-dataset="${e(ds.id)}"
-                 href="${e(aboutHref(r[COL.about], ds.id))}">About dataset</a>`
-            : "About dataset: NA"}</p>
+                 href="${e(aboutHref(r[COL.about], ds.id))}">Dataset web research</a>`
+            : "Dataset web research: NA"}</p>
 
           <h5 class="details-heading details-subheading">Update status</h5>
           <p class="details-description">${e(r[COL.update] || "NA")}</p>

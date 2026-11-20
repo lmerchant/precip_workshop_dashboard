@@ -97,7 +97,7 @@ was considered and set aside. Revisit when the dataset detail page is built.
 - 46 datasets render as cards, sorted by data-source tag, coverage tag,
   then name (re-sort with `python3 .work/sort_datasets.py` after any
   rename or new dataset); click a card to open the detail panel: "Dataset"
-  (full name + "About dataset", NA until the dataset has an `about_url`),
+  (full name + "Dataset web research", NA until the dataset has an `about_url`),
   update status, metadata grid (incl. Curator, Contact email, DOI), a
   "Data archive(s)" table (Archive / About), Notes, then a "Data
   access endpoints" table (name + link). `email` and `doi` are blank for
@@ -203,7 +203,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
   Then a search box on the dataset research pages that searches only that
   dataset's parts (`app/dataset-search.js`; heading ids added to
   `markdown.js`); details in `notes/dataset-about-pages-howto.md`.
-  The user merges and pushes.
+  The panel link "About dataset" is now "Dataset web research" (NA text
+  too), to match the linked page's title. The user merges and pushes.
 
 - Session 8 (2026-11-19): each panel now opens with "Dataset" + full name +
   "About dataset: NA" (becomes a link once a dataset has an `about_url`;
@@ -304,7 +305,8 @@ was considered and set aside. Revisit when the dataset detail page is built.
 ## Next steps
 
 00000. Session 9 is committed on `develop`; the user merges and pushes.
-   Optionally check the dataset pages on the live site. When more dataset research arrives, follow
+   Optionally check the dataset pages, their search and the "Dataset web
+   research" panel links on the live site. When more dataset research arrives, follow
    `notes/dataset-about-pages-howto.md`. Ask whether the remaining
    in-sentence WebFetch/subagent mentions should be reworded.
 
@@ -312,7 +314,7 @@ was considered and set aside. Revisit when the dataset detail page is built.
    `app/data/archive_links.json` (add any new archive name there when
    adding a dataset); add `about_url` to each dataset in `datasets.json`
    when the user's dataset pages (another project) exist — the panel then
-   shows an "About dataset" link. Optionally check the panels on the live
+   shows an "Dataset web research" link. Optionally check the panels on the live
    site.
 
 000. Session 7 is published: the user merged and pushed through `f369813`

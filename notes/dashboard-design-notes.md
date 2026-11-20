@@ -185,8 +185,8 @@ there. First one: NOAA NCEI, from the user's research answer
   card. The archive page's "← Back to dashboard" sends them back. Open-card
   ids that match no dataset (old card numbers like `21`) are dropped on load.
 - **Dataset block** (session 8): each panel starts with an h4 "Dataset", the
-  full name (to copy) and "About dataset": a link to the dataset's
-  optional `about_url` field in `datasets.json`, or "About dataset: NA" when
+  full name (to copy) and "Dataset web research" (was "About dataset"): a link to the dataset's
+  optional `about_url` field in `datasets.json`, or "Dataset web research: NA" when
   it's missing/blank (the user's dataset pages come from another project);
   "Update status" is an h5.
 - **Archive page layout**: same navy header as the dashboard (archive name,

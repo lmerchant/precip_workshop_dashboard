@@ -17,7 +17,7 @@ Built 2026-11-20 (session 9). The agreed format is in
 | `app/dataset.html`, `app/dataset.js` | The page. `dataset.html?id=<id>` = summary page; `&part=<N>` = one part's page. |
 | `app/dataset-search.js` | The search box: searches this one dataset's parts (see "Search" below). |
 | `app/markdown.js` | `renderMarkdown(text, { headingIds: true })` gives headings ids (`sec-<slug>`); `markdownPlainText()` and `markdownHeadingIds()` let the search index use the same text and ids. |
-| `app/app.js` (`aboutHref`) | The panel's "About dataset" link adds the search/filters and `open=<id>` to a `dataset.html?…` about_url. |
+| `app/app.js` (`aboutHref`) | The panel's "Dataset web research" link adds the search/filters and `open=<id>` to a `dataset.html?…` about_url. |
 | `app/styles.css` section 13c | Dataset page styles (reuses the archive page's `.prose`, `.research-scope`, `.searched-on`). |
 
 Research root: `my_docs/about_data/rstar_query_results/dataset_answers/about_dataset_queries/`.
@@ -102,7 +102,7 @@ Second one?
 2. Add an entry to `app/data/dataset_pages.json` (`id`, `research_folder`,
    `parts`), then steps 2–6 above. The script sets the dataset's
    `about_url` to `dataset.html?id=<id>`, which turns the panel's
-   "About dataset: NA" into a link.
+   "Dataset web research: NA" into a link.
 
 ### Re-running
 
