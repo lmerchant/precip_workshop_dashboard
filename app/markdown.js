@@ -7,9 +7,14 @@
  * can't run. Links are only kept for http(s), mailto and relative
  * addresses.
  *
- * renderMarkdown(text, { headingOffset }) returns an HTML string.
- * headingOffset shifts heading levels (1 turns "#" into <h2>), so a
- * page's own <h1> stays the only one.
+ * renderMarkdown(text, { headingOffset, headingIds }) returns an HTML
+ * string. headingOffset shifts heading levels (1 turns "#" into <h2>),
+ * so a page's own <h1> stays the only one. headingIds gives each heading
+ * an id from its text (see headingIds below), so links can jump to it.
+ *
+ * Also exported: markdownPlainText(text), the text without markup or
+ * link addresses (used by the dataset research search), and
+ * markdownHeadingIds(), which makes the same ids the renderer does.
  */
 
 (function () {
@@ -97,9 +102,35 @@ ${rows}
     return html;
   }
 
-  function renderMarkdown(text, { headingOffset = 0 } = {}) {
+  // Text without Markdown markup; links keep their label, not the address.
+  function plainText(text) {
+    return String(text)
+      .replace(/\[([^\]]+)\]\([^)\s]+\)/g, "$1")
+      .replace(/\*\*|`/g, "")
+      .replace(/^\s*\|?\s*:?-{3,}.*$/gm, "")
+      .replace(/^\s*#{1,6}\s+/gm, "")
+      .replace(/\|/g, " ")
+      .replace(/[ \t]+/g, " ");
+  }
+
+  // Ids for headings, from their text: "Funding routes and their status"
+  // -> "sec-funding-routes-and-their-status"; repeats get "-2", "-3".
+  // Call once per page and pass every heading in order.
+  function headingIds() {
+    const seen = new Map();
+    return heading => {
+      const base = "sec-" + (plainText(heading).toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "section");
+      const n = (seen.get(base) || 0) + 1;
+      seen.set(base, n);
+      return n === 1 ? base : `${base}-${n}`;
+    };
+  }
+
+  function renderMarkdown(text, { headingOffset = 0, headingIds: withIds = false } = {}) {
     const lines = text.replace(/\r\n?/g, "\n").split("\n");
     const out = [];
+    const idFor = withIds ? headingIds() : null;
     let i = 0;
 
     while (i < lines.length) {
@@ -110,7 +141,8 @@ ${rows}
       const h = line.match(/^(#{1,6})\s+(.*?)\s*#*\s*$/);
       if (h) {
         const level = Math.min(6, h[1].length + headingOffset);
-        out.push(`<h${level}>${inline(h[2])}</h${level}>`);
+        const id = idFor ? ` id="${esc(idFor(h[2]))}"` : "";
+        out.push(`<h${level}${id}>${inline(h[2])}</h${level}>`);
         i++;
         continue;
       }
@@ -145,4 +177,6 @@ ${rows}
   }
 
   window.renderMarkdown = renderMarkdown;
+  window.markdownPlainText = plainText;
+  window.markdownHeadingIds = headingIds;
 })();

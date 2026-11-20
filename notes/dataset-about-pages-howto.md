@@ -15,6 +15,8 @@ Built 2026-11-20 (session 9). The agreed format is in
 | `app/content/datasets/<id>/pt<N>.md` | Answer text, cleaned, with its first `# ` heading removed. Generated: don't edit by hand, re-run the script. |
 | `app/content/datasets/<id>/pt<N>.json` | `{ "question": …, "searched_on": [ … ] }` from `query_questions.txt`. Generated. |
 | `app/dataset.html`, `app/dataset.js` | The page. `dataset.html?id=<id>` = summary page; `&part=<N>` = one part's page. |
+| `app/dataset-search.js` | The search box: searches this one dataset's parts (see "Search" below). |
+| `app/markdown.js` | `renderMarkdown(text, { headingIds: true })` gives headings ids (`sec-<slug>`); `markdownPlainText()` and `markdownHeadingIds()` let the search index use the same text and ids. |
 | `app/app.js` (`aboutHref`) | The panel's "About dataset" link adds the search/filters and `open=<id>` to a `dataset.html?…` about_url. |
 | `app/styles.css` section 13c | Dataset page styles (reuses the archive page's `.prose`, `.research-scope`, `.searched-on`). |
 
@@ -46,6 +48,29 @@ Second one?
   question as a paragraph, "Searched on" `<h3>` and list,
   the answer (its `##` sections render as `<h2>`), then previous/next links.
 - Every link between these pages carries the dashboard's q/category/coverage/open.
+
+## Search (session 9)
+
+- A search box under the header on the summary and part pages. It searches
+  only this dataset's research: every part's question, "Searched on" list
+  and answer text (link labels, not link addresses).
+- Each part is split into sections at its headings ("Introduction" = text
+  before the first heading; "Question and Searched on" = the .json). A
+  section matches when it contains every typed word, as substrings, case
+  ignored (same rule as the dashboard search; "goes" also matches "GOES").
+  At least 2 characters; 200 ms after typing stops.
+- The parts' files are fetched on the first search and kept.
+- Results replace the page content: grouped by part, one line per section
+  with a match count and a snippet with `<mark>` highlights; "Sources"
+  sections last. A screen-reader status says "Found in N sections on M
+  pages".
+- A result opens `dataset.html?id=…&part=N&rq=<words>#sec-<slug>`: the
+  part page highlights the words, shows "Matches for … are highlighted.
+  Back to search results", and scrolls to the first match in that section.
+  Previous/next links keep `rq`; clearing the box removes highlights and
+  `rq`. On the summary page, `rq` in the URL shows the results at once.
+- "Back to dashboard" drops `rq` (only q/category/coverage/open go back).
+- New parts are searchable as soon as the import script has run.
 
 ## Adding research
 

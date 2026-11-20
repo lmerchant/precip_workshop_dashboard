@@ -12,12 +12,16 @@
  * The dashboard's own parameters (q, category, coverage, open) ride along
  * in the URL, so "Back to dashboard" returns to the same search and
  * filters, with this dataset's card open.
+ *
+ * The search box searches this dataset's research only; see
+ * dataset-search.js. Its words are kept in the URL as "rq".
  */
 
 const params = new URLSearchParams(location.search);
 const datasetId = params.get("id") || "";
 const partParam = params.get("part");
 const backQuery = dashboardQuery(location.search);
+let researchQuery = (params.get("rq") || "").trim();
 
 const $ = id => document.getElementById(id);
 
@@ -32,12 +36,30 @@ function dashboardHref() {
 }
 
 // Address of the summary page (no part) or of one part, keeping the
-// dashboard state.
-function pageHref(part) {
+// dashboard state; rq carries the research search, hash a section id.
+function pageHref(part, { rq = "", hash = "" } = {}) {
   const p = new URLSearchParams({ id: datasetId });
   if (part) p.set("part", String(part.part));
-  return `dataset.html?${p}${backQuery ? `&${backQuery}` : ""}`;
+  if (rq) p.set("rq", rq);
+  return `dataset.html?${p}${backQuery ? `&${backQuery}` : ""}${hash ? `#${encodeURIComponent(hash)}` : ""}`;
 }
+
+// The search box changed: keep its words in the URL, and in the
+// previous / next links. With no words, the page's search note goes.
+function setResearchQuery(query) {
+  if (query === researchQuery) return;
+  researchQuery = query;
+  const p = new URLSearchParams(location.search);
+  if (query) p.set("rq", query); else p.delete("rq");
+  history.replaceState(null, "", `?${p}${location.hash}`);
+  document.querySelectorAll("a[data-part]").forEach(a => {
+    const part = currentEntry.parts.find(x => String(x.part) === a.dataset.part);
+    a.href = pageHref(part, { rq: query });
+  });
+  if (!query) document.querySelectorAll(".search-note").forEach(n => n.remove());
+}
+
+let currentEntry = null;
 
 const partFile = (part, ext) =>
   `content/datasets/${encodeURIComponent(datasetId)}/pt${part.part}.${ext}`;
@@ -134,20 +156,42 @@ async function showPart(entry, names, part) {
   const next = entry.parts[index + 1];
   const nav = prev || next ? `
     <nav class="part-nav" aria-label="Other research pages for this dataset">
-      ${prev ? `<a class="part-nav-prev" href="${escapeHtml(pageHref(prev))}"><span aria-hidden="true">←</span> ${escapeHtml(prev.topic)}</a>` : "<span></span>"}
-      ${next ? `<a class="part-nav-next" href="${escapeHtml(pageHref(next))}">${escapeHtml(next.topic)} <span aria-hidden="true">→</span></a>` : ""}
+      ${prev ? `<a class="part-nav-prev" data-part="${prev.part}" href="${escapeHtml(pageHref(prev, { rq: researchQuery }))}"><span aria-hidden="true">←</span> ${escapeHtml(prev.topic)}</a>` : "<span></span>"}
+      ${next ? `<a class="part-nav-next" data-part="${next.part}" href="${escapeHtml(pageHref(next, { rq: researchQuery }))}">${escapeHtml(next.topic)} <span aria-hidden="true">→</span></a>` : ""}
     </nav>` : "";
 
+  // Opened from a search result: say what is highlighted, with a way
+  // back to the results.
+  const note = researchQuery ? `
+      <p class="search-note">Matches for “${escapeHtml(researchQuery)}” are highlighted.
+        <a href="${escapeHtml(pageHref(null, { rq: researchQuery }))}">Back to search results</a></p>` : "";
+
   // renderMarkdown escapes the file's text before adding markup. The
-  // answer's "##" sections become <h2>s under the page's <h1>.
+  // answer's "##" sections become <h2>s under the page's <h1>, with ids
+  // that search results link to.
   panel.innerHTML = `
     <div class="prose dataset-prose">
       <p class="summary-link"><a href="${escapeHtml(pageHref(null))}"><span aria-hidden="true">←</span> Back to ${escapeHtml(names.short)} web research</a></p>
-      <div class="research-scope">${partQuestionsHtml(q)}</div>
-      <article>${renderMarkdown(text)}</article>
+      ${note}
+      <div class="research-scope" id="research-question">${partQuestionsHtml(q)}</div>
+      <article>${renderMarkdown(text, { headingIds: true })}</article>
       ${nav}
     </div>`;
   panel.removeAttribute("aria-busy");
+
+  if (researchQuery) {
+    highlightMatches(panel.querySelector(".research-scope"), researchQuery);
+    highlightMatches(panel.querySelector("article"), researchQuery);
+  }
+  // The text arrives after the page loads, so jump to the #section here:
+  // to its first highlighted word if there is one, else its heading.
+  const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (target) {
+    const firstHit = [...panel.querySelectorAll("mark.search-hit")]
+      .find(m => target.contains(m) || target.compareDocumentPosition(m) & Node.DOCUMENT_POSITION_FOLLOWING);
+    if (firstHit) firstHit.scrollIntoView({ block: "center" });
+    else target.scrollIntoView();
+  }
 }
 
 /* ---------- Start ---------- */
@@ -179,9 +223,11 @@ async function init() {
 
   const names = splitName(row.name);
   $("pageSubtitle").textContent = names.full;
+  currentEntry = entry;
 
   if (partParam === null) {
     showSummary(entry, names);
+    setupResearchSearch(entry, names, { showResultsNow: true });
     return;
   }
   const part = entry.parts.find(p => String(p.part) === partParam);
@@ -191,6 +237,7 @@ async function init() {
     return;
   }
   showPart(entry, names, part);
+  setupResearchSearch(entry, names, { showResultsNow: false });
 }
 
 init();

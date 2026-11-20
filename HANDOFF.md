@@ -14,7 +14,8 @@ _Last updated: 2026-11-20 (end of session 9)_
   - `archive.html`, `archive.js` — the archive page
     (`archive.html?id=noaa-ncei`), also used for instrument pages
     (`?id=noaa-satellites`); see "Archive pages" in the design notes
-  - `dataset.html`, `dataset.js` — dataset web research pages (session 9):
+  - `dataset.html`, `dataset.js`, `dataset-search.js` — dataset web
+    research pages and their per-dataset search (session 9):
     `dataset.html?id=<dataset id>` is the summary, `&part=<N>` one part;
     parts listed in `data/dataset_pages.json`, text in
     `content/datasets/<id>/pt<N>.md` + `.json`. How to build and add more:
@@ -199,6 +200,9 @@ was considered and set aside. Revisit when the dataset detail page is built.
   headings 1.1rem on the dataset pages. Then the archive and instrument
   pages got the same Question/Searched on format and sizes ("Question"
   h3 1.5rem + paragraph, "Searched on" h4 1.1rem, under the report's h2).
+  Then a search box on the dataset research pages that searches only that
+  dataset's parts (`app/dataset-search.js`; heading ids added to
+  `markdown.js`); details in `notes/dataset-about-pages-howto.md`.
   The user merges and pushes.
 
 - Session 8 (2026-11-19): each panel now opens with "Dataset" + full name +

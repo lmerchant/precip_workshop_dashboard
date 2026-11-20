@@ -903,6 +903,7 @@ body {
 }
 
 .dataset-prose .research-part:first-child h2,
+.search-results > h2:first-child,
 .dataset-prose article > h2:first-child {
   margin-top: 0;
   padding-top: 0;
@@ -935,6 +936,70 @@ body {
 
 .part-nav-next {
   margin-left: auto;
+}
+
+/* Search across one dataset's research (dataset-search.js) */
+.search-results .search-summary {
+  color: var(--muted-text);
+  margin-bottom: 8px;
+}
+
+.dataset-prose .search-group h3 {
+  font-size: 1.1rem;
+  margin: 28px 0 10px;
+}
+
+.search-hits {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.prose .search-hits li {
+  margin: 0 0 16px;
+  padding-left: 14px;
+  border-left: 3px solid var(--divider);
+}
+
+.search-hit-link {
+  font-weight: 500;
+}
+
+.search-hit-count {
+  margin-left: 8px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--muted-text);
+}
+
+.prose .search-snippet {
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+
+/* Matched words: dark text on yellow (over 9:1) */
+.prose mark {
+  background: #FFE08A;
+  color: var(--heading-text);
+  padding: 0 1px;
+}
+
+.search-note {
+  background: var(--panel-bg);
+  border-left: 4px solid var(--dataset-card-rule);
+  padding: 10px 14px;
+}
+
+.search-note a {
+  margin-left: 6px;
+  font-weight: 500;
+}
+
+/* Section links from search results land below the top edge */
+.dataset-prose [id] {
+  scroll-margin-top: 16px;
 }
 
 
