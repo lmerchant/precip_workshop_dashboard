@@ -123,10 +123,13 @@ indent, non-ASCII kept).
   colon), which left empty bullets until they were added to
   `DROP_ITEM_PREFIXES` in `scripts/import_archive_page.py`. After each
   import, look at the end of "Gaps" for a bullet cut short.
+- At the user's request (2026-11-20), "**The token budget ended the
+  research**…" bullets (GPCP pt6, GHCN-D pt3) are dropped by a
+  `DROP_ITEM_PREFIXES` entry.
 - Links to `./` or `web_search_results/` (research-project files) are
   reported as `check:` lines; fix by hand or with a `--replace`-style edit.
 - Tool notes left in prose on purpose (2026-11-20): GPCP pt3 "Gaps"
   (WebFetch 404, checking subagent not run), GPCP pt5 "No checking subagent
-  was run", GPCP pt6 "The token budget ended the research… subagents", PERSIANN pt2 maturity-matrix note, PERSIANN pt4 note under the
+  was run", PERSIANN pt2 maturity-matrix note, PERSIANN pt4 note under the
   ratings table, PERSIANN pt6 "The checking subagent reports…", NCEI archive
   page line 34 "the article or the extract".

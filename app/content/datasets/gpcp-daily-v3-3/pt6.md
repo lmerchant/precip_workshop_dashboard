@@ -164,7 +164,6 @@ Mission lives: [WMO OSCAR](https://space.oscar.wmo.int/satellites/view/snpp) pag
 - **1DD's SSMIS feed.** Which feed 1DD has used since the RSS SSMIS CDR ended in 2023, and after FNMOC's 2025 change, is not documented. Files still name DMSP/SSMIS through 2026-08-31.
 - **V3.x file attributes.** The V3.x files' "Source" attribute values were not read (Earthdata login).
 - **Unread paper.** Huffman et al. 2023 (J. Climate) returned HTTP 403; only its abstract was read.
-- **The token budget ended the research**, at 09:22, not the evidence running out. The research subagents hit their token share at 09:11, so no follow-up subagent was sent. The DuckDuckGo gap pass ran only 2 queries.
 
 ## Sources
 

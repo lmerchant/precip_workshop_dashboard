@@ -64,6 +64,7 @@ DROP_ITEM_PREFIXES = (
     "- **Pages to check by hand.**",
     "- **Sandbox:**",
     "- **Hosts refused.**",
+    "- **The token budget ended the research**",  # GPCP pt6, GHCN-D pt3 (user asked 2026-11-20)
 )
 
 # Files that exist only in the research project. A sentence that names

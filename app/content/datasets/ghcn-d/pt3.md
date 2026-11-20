@@ -99,7 +99,6 @@ No news found names GHCN-Daily's maintainers or staff. Major US outlets covered 
 - **FY2027 NCEI funding** depends on the bill that follows the CR, which runs to December 11, 2026.
 - **COOP:** no decision after the request for comments. Watch the Federal Register and SAM.gov 1305M2-COOP.
 - **Not settled:** which AWOS-C sites are climate sites, the CoCoRaHS funding route, whether the RCC contracts were restored, and why Canada's feed stopped in 2024.
-- **The token budget ended the research** (at 13:03), not saturation. A second pass on the saved files afterwards checked every remaining coverage candidate and added 11 facts. It made no new searches, so it couldn't fill gaps that aren't in the saved files.
 
 ## Sources
 
