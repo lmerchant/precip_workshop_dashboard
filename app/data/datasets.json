@@ -121,6 +121,44 @@
       ]
     },
     {
+      "id": "uscrn-v2",
+      "name": "USCRN: United States Climate Reference Network (Version 2)",
+      "data_archive": "NOAA NCEI",
+      "precipitation_basis": "Gauge-based",
+      "period_of_record": "November 15, 2000 - Present",
+      "formal_cdr": "",
+      "update_status": "Operational; continuously updated.",
+      "spatial_coverage": "Contiguous United States (CONUS), Alaska, and Hawaii; also some U.S. territories",
+      "resolution": "Point-based station observations (not gridded)",
+      "temporal_frequency": "5-minute and hourly; daily and monthly aggregates also available",
+      "curator": "NOAA USCRN Program Team. Stations managed by NOAA Atmospheric Turbulence and Diffusion Division (ATDD); data maintained and distributed by NOAA National Centers for Environmental Information (NCEI).",
+      "email": "",
+      "doi": "10.7289/V5MS3QR9",
+      "notes": "NOAA-operated network of high-quality climate monitoring stations providing long-term, quality-controlled precipitation and other meteorological observations across the United States. Also distributed through the USCRN public FTP archive and NOAA data distribution services.",
+      "access_endpoints": [
+        {
+          "name": "NOAA Sub-hourly Archive (5-minute precipitation observations)",
+          "url": "https://www.ncei.noaa.gov/pub/data/uscrn/products/subhourly01/",
+          "role": "primary"
+        },
+        {
+          "name": "NOAA Hourly Archive (hourly precipitation observations)",
+          "url": "https://www.ncei.noaa.gov/pub/data/uscrn/products/hourly02/",
+          "role": "primary"
+        },
+        {
+          "name": "NOAA Daily Archive (daily precipitation totals)",
+          "url": "https://www.ncei.noaa.gov/pub/data/uscrn/products/daily01/",
+          "role": "primary"
+        },
+        {
+          "name": "NOAA Monthly Archive (monthly precipitation totals)",
+          "url": "https://www.ncei.noaa.gov/pub/data/uscrn/products/monthly01/",
+          "role": "primary"
+        }
+      ]
+    },
+    {
       "id": "cmap-cpc-merged-analysis-of-precipitation",
       "name": "CMAP: CPC Merged Analysis of Precipitation",
       "data_archive": "NOAA PSL",
