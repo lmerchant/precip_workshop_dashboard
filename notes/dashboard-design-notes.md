@@ -11,7 +11,7 @@ access links and more metadata is coming). Shape:
     "name": "...", "data_archive": "...", "precipitation_basis": "...",
     "period_of_record": "...", "formal_cdr": "...", "update_status": "...",
     "spatial_coverage": "...", "resolution": "...", "temporal_frequency": "...",
-    "curator": "...", "email": "", "doi": "", "notes": "...",
+    "curator": "...", "doi": "", "notes": "...",
     "access_endpoints": [
       { "name": "DWD/GPCC archive", "url": "https://...", "role": "primary" },
       { "name": "NOAA PSL mirror",  "url": "https://...", "role": "mirror" } ]
@@ -28,7 +28,7 @@ access links and more metadata is coming). Shape:
   (links only; archives listed there without a link were left out). Tracking
   `utm_` parameters were removed. One-time build script:
   `.work/build_json.py` (not in git).
-- `curator`, `email`, `doi`, `notes` (added 2026-11-18) come from the user's
+- `curator`, `doi`, `notes` (added 2026-11-18) come from the user's
   `my_docs/about_data/master_climate_inventory_subset.json`, merged by
   `.work/merge_inventory.py` (not in git). Matching used a hand-made list of
   inventory id → dataset id, because URL matching linked only 4 of 14 and two
@@ -38,10 +38,10 @@ access links and more metadata is coming). Shape:
   blank basis/CDR/update/resolution/frequency for the user to fill in.
   DS-234 ("GPCC") was added, then dropped as a duplicate of the existing
   GPCC datasets. CHIRPS notes had "50°S-50°N land" removed (wrong for v3).
-  `email` is deliberately blank everywhere: the site is public; the user
-  plans to fill it in for a password-protected site later. Every dataset has
-  all four keys ("" when unknown). The panel shows Curator, Contact email
-  (mailto link) and DOI (doi.org link) in the metadata grid, and a Notes
+  An `email` key was there too (always blank, public site) until
+  2026-11-21, when the user had it removed from the data and the panel.
+  Every dataset has all three keys ("" when unknown). The panel shows
+  Curator and DOI (doi.org link) in the metadata grid, and a Notes
   section after it.
 - Order (since 2026-11-18): datasets are sorted by data-source tag, then
   coverage tag (both alphabetical by label), then name, so the dashboard

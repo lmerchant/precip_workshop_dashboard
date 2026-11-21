@@ -20,6 +20,10 @@ _Last updated: 2026-11-21 (session 13)_
     parts listed in `data/dataset_pages.json`, text in
     `content/datasets/<id>/pt<N>.md` + `.json`. How to build and add more:
     `notes/dataset-about-pages-howto.md`
+  - `overview.html`, `overview.js` — dataset overview pages
+    (`overview.html?id=<dataset id>`, session 13), from
+    `content/datasets/<id>/overview.json`; built and updated with
+    `scripts/import_dataset_overviews.py`. How: `notes/dataset-overview-pages-howto.md`
   - `shared.js` (helpers for all pages), `markdown.js` (Markdown renderer)
   - `data/archives.json` — archives and instruments that have pages, and
     their pages; `"kind": "archive"` or `"instrument"`
@@ -28,8 +32,8 @@ _Last updated: 2026-11-21 (session 13)_
   - `content/archives/<id>/` and `content/instruments/<id>/` — per page:
     `<page>.md` (text), `<page>.json` (research question + "searched on"
     list), `<page>.query.md` (R* query statement)
-  - `data/datasets.json` — the dataset data (3 datasets since session 13:
-    GHCN-D, GPCP Daily v3.3, PERSIANN-CDR; the user backed up the full
+  - `data/datasets.json` — the dataset data (4 datasets since session 13:
+    GHCN-D, GPCP Daily v3.3, IMERG Late Run V07, PERSIANN-CDR; the user backed up the full
     47-dataset file and the subsets live in
     `my_docs/about_data/datasets_json/`), including each
     dataset's `access_endpoints` list. This is now the file to edit; format in
@@ -97,15 +101,19 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Current state (after session 13)
 
-- 3 datasets render as cards (the workshop "kernel" subset, from
-  `my_docs/about_data/datasets_json/datasets-subset-workshop_kernel.json`;
-  the full 47-dataset list was backed up by the user), sorted by data-source tag, coverage tag,
+- 4 datasets render as cards (the workshop "kernel" subset from
+  `my_docs/about_data/datasets_json/datasets-subset-workshop_kernel.json`
+  plus IMERG Late Run; the full 47-dataset list was backed up by the user).
+  Their dashboard values now come from the `dashboard` blocks of
+  `my_docs/about_data/dataset_metadata/json/*.json` (keep the two in sync;
+  `scripts/import_dataset_overviews.py` lists differences). Each panel
+  opens with "Dataset overview" then "Dataset web research", sorted by data-source tag, coverage tag,
   then name (re-sort with `python3 .work/sort_datasets.py` after any
   rename or new dataset); click a card to open the detail panel: "Dataset"
   (full name + "Dataset web research", NA until the dataset has an `about_url`),
-  update status, metadata grid (incl. Curator, Contact email, DOI), a
+  update status, metadata grid (incl. Curator, DOI), a
   "Data archive(s)" table (Archive / About), Notes, then a "Data
-  access endpoints" table (name + link). `email` and `doi` are blank for
+  access endpoints" table (name + link). `doi` is blank for
   now; 4 new datasets (TerraClimate, WorldClim, CMAP, CoCoRaHS) have
   blanks the user will fill in. Blank fields show "NA" in the panel
   (label set in `app.js`; the JSON keeps them as empty strings).
@@ -187,6 +195,46 @@ was considered and set aside. Revisit when the dataset detail page is built.
   only, npm runs in the user's Terminal (see global CLAUDE.md).
 
 ## Session log
+
+- Session 13, part 2 (2026-11-21): converted the "## ChatGPT answer"
+  sections of `my_docs/about_data/dataset_metadata/markdown/*.md` (GHCN-D,
+  GPCP Daily, PERSIANN-CDR, IMERG Late Run) into one JSON file each in
+  `my_docs/about_data/dataset_metadata/json/`, schema described in that
+  folder's `README.md`. Each file has a `dashboard` block with exactly the
+  `datasets.json` keys (card + panel) and fuller sections for a future
+  per-dataset overview page; `review_notes` lists conflicts to check
+  (GHCN-D DOI is the paper's, not the dataset's; PERSIANN curator Hsu vs
+  PI Sorooshian; IMERG Late start date 1998 vs 2000). The user will
+  review; nothing merged into `datasets.json` yet.
+  Then, at the user's request, contact emails and the `email` field were
+  removed everywhere: from the metadata JSON (`dashboard.email`,
+  `people.curator.email`), from `app/data/datasets.json`, and the
+  "Contact email" row from the panel (`app.js`). Checked in the browser.
+  Then the user's review: where ChatGPT and the old values disagree, use
+  ChatGPT. User-given values: GHCN-D DOI 10.7289/V5D21VHZ (official NCEI
+  citation copied in), resolution "Station points (no fixed grid)"; GPCP
+  V3.3 DOI 10.5067/MEASURES/GPCP/DATA307 (GES DISC; NCEI's 10.25921/9b5m-ka77
+  kept as `other_dois`), so GPCP's `data_archive` is now "NOAA NCEI; NASA
+  GES DISC"; IMERG Late DOI …/3B-HH-L/07 and start January 1998 confirmed.
+  The `dashboard` blocks were then copied into `app/data/datasets.json`
+  and IMERG Late Run (`imerg-late-run-v07`, Satellite / Global) added;
+  "NASA PPS" added (blank) to `archive_links.json`. utm tags removed from
+  the GPCP markdown. Checked in the browser: 4 cards, panels, no errors.
+  Then more from the user: GPCP V3.2 daily starts June 2000 (DOI
+  10.5067/MEASURES/GPCP/DATA305); IMERG Late file formats (HDF5, NetCDF,
+  GeoTIFF, PNG, OPeNDAP); PERSIANN-CDR AWS bucket (also added to the
+  panel), Azure, NCEI download and THREDDS links, and a "check latest
+  date" note in place of the fixed 2026-07-31 date. Each file's
+  `source.followups` records where the extra facts came from.
+  Then dataset overview pages: `app/overview.html` + `overview.js`, a
+  "Dataset overview" link above "Dataset web research" in each panel
+  (`overview_url` in `datasets.json`), data copied into
+  `app/content/datasets/<id>/overview.json` by the new
+  `scripts/import_dataset_overviews.py` (drops `source`, `dashboard`,
+  `review_notes`). Checked in the browser for all 4 datasets: sections,
+  heading order, phone width (no sideways scroll), back link restores
+  search and open card, no console errors. Details in
+  `notes/dataset-overview-pages-howto.md`.
 
 - Session 13 (2026-11-21): removed the temporary IMERG page (user's
   request): `app/imerg-overview.html` moved to `.work/removed/` (the
@@ -352,9 +400,18 @@ was considered and set aside. Revisit when the dataset detail page is built.
 
 ## Next steps
 
+0000000. Dataset metadata JSON (`my_docs/about_data/dataset_metadata/json/`,
+   README there) is reviewed and its `dashboard` blocks are in
+   `datasets.json`, and the overview pages are built. Left: the user
+   checks the overview pages and the open items in each file's
+   `review_notes`; fill the NASA GES DISC and NASA PPS links in
+   `archive_links.json`. Possible next step: a link from the web research
+   pages back to the overview. `my_docs/` is
+   not in git, so these files exist only on the user's machine.
+
 000000. Session 10 (USCRN) is committed on `develop`; the user merges and
    pushes. Optionally confirm USCRN's data source ("Gauge-based", inferred)
-   and fill its blank `formal_cdr` / `email` if known. To add another
+   and fill its blank `formal_cdr` if known. To add another
    dataset: append an object to `datasets.json` with a unique `id`, run
    `python3 .work/sort_datasets.py`, and add any new archive name to
    `archive_links.json`.

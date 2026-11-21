@@ -32,12 +32,14 @@ const COL = {
   resolution: "resolution",
   frequency: "temporal_frequency",
   curator: "curator",
-  email: "email",
   doi: "doi",
   notes: "notes",
   // Address of the dataset's "Dataset web research" page (optional; set by
   // scripts/import_dataset_pages.py). Without it the panel shows NA.
   about: "about_url",
+  // Address of the dataset's overview page (optional; set by
+  // scripts/import_dataset_overviews.py). Without it the panel shows NA.
+  overview: "overview_url",
 };
 
 // Fields shown in the metadata grid of the detail panel, in order.
@@ -49,16 +51,14 @@ const METADATA_FIELDS = [
   ["Temporal frequency", COL.frequency],
   ["Formal CDR status", COL.cdr],
   ["Curator", COL.curator],
-  ["Contact email", COL.email],
   ["DOI", COL.doi],
 ];
 
 // One metadata value as HTML: archive names may link to archive pages,
-// an email becomes a mailto link and a DOI a doi.org link.
+// a DOI becomes a doi.org link.
 function metadataValueHtml(col, value) {
   const e = escapeHtml;
   if (!value) return "NA";
-  if (col === COL.email) return `<a href="mailto:${e(value)}">${e(value)}</a>`;
   if (col === COL.doi) {
     const url = /^https?:\/\//.test(value) ? value : `https://doi.org/${value}`;
     return `<a href="${e(url)}">${e(value)}</a>`;
@@ -175,8 +175,8 @@ function archiveHref(id, datasetId) {
   return `archive.html?id=${encodeURIComponent(id)}${back ? `&${back}` : ""}`;
 }
 
-// Link to a dataset's about page (its about_url). A page on this site
-// (such as dataset.html) gets
+// Link to a dataset's about page (its about_url or overview_url). A page
+// on this site (dataset.html, overview.html) gets
 // the search and filters, with only this card as the open card, so its
 // "Back to dashboard" returns here; other addresses are used as they are.
 function aboutHref(url, datasetId) {
@@ -244,6 +244,10 @@ function cardHtml(ds) {
         <div class="details-content">
           <h4 class="details-heading caps">Dataset</h4>
           <p class="details-description dataset-full-name">${e(r[COL.name])}</p>
+          <p class="details-description">${r[COL.overview]
+            ? `<a class="dataset-about-link" data-about="${e(r[COL.overview])}" data-dataset="${e(ds.id)}"
+                 href="${e(aboutHref(r[COL.overview], ds.id))}">Dataset overview</a>`
+            : "<strong>Dataset overview:</strong> NA"}</p>
           <p class="details-description">${r[COL.about]
             ? `<a class="dataset-about-link" data-about="${e(r[COL.about])}" data-dataset="${e(ds.id)}"
                  href="${e(aboutHref(r[COL.about], ds.id))}">Dataset web research</a>`
