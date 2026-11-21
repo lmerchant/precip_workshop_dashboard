@@ -1,6 +1,6 @@
 # Handoff — Precipitation Workshop Dashboard
 
-_Last updated: 2026-11-20 (end of session 10)_
+_Last updated: 2026-11-21 (session 13)_
 
 ## What exists
 
@@ -28,7 +28,10 @@ _Last updated: 2026-11-20 (end of session 10)_
   - `content/archives/<id>/` and `content/instruments/<id>/` — per page:
     `<page>.md` (text), `<page>.json` (research question + "searched on"
     list), `<page>.query.md` (R* query statement)
-  - `data/datasets.json` — the dataset data (47 datasets since session 10), including each
+  - `data/datasets.json` — the dataset data (3 datasets since session 13:
+    GHCN-D, GPCP Daily v3.3, PERSIANN-CDR; the user backed up the full
+    47-dataset file and the subsets live in
+    `my_docs/about_data/datasets_json/`), including each
     dataset's `access_endpoints` list. This is now the file to edit; format in
     `notes/dashboard-design-notes.md`.
   - The old CSV now lives only in `my_docs/about_data/` (not in git).
@@ -92,9 +95,11 @@ site is on GitHub Pages via the Actions workflow, which publishes `app/` as-is. 
 needed (it can build one page per dataset from the CSV). Next.js static export
 was considered and set aside. Revisit when the dataset detail page is built.
 
-## Current state (after session 10)
+## Current state (after session 13)
 
-- 47 datasets render as cards, sorted by data-source tag, coverage tag,
+- 3 datasets render as cards (the workshop "kernel" subset, from
+  `my_docs/about_data/datasets_json/datasets-subset-workshop_kernel.json`;
+  the full 47-dataset list was backed up by the user), sorted by data-source tag, coverage tag,
   then name (re-sort with `python3 .work/sort_datasets.py` after any
   rename or new dataset); click a card to open the detail panel: "Dataset"
   (full name + "Dataset web research", NA until the dataset has an `about_url`),
@@ -182,6 +187,17 @@ was considered and set aside. Revisit when the dataset detail page is built.
   only, npm runs in the user's Terminal (see global CLAUDE.md).
 
 ## Session log
+
+- Session 13 (2026-11-21): removed the temporary IMERG page (user's
+  request): `app/imerg-overview.html` moved to `.work/removed/` (the
+  sandbox can't reach the Trash; delete it from there when you like) and
+  its mention dropped from the `aboutHref` comment in `app.js`. Replaced
+  `app/data/datasets.json` with the user's 3-dataset subset
+  `datasets-subset-workshop_kernel.json` (entries identical to the old
+  ones, so IMERG's `about_url` went with the IMERG dataset). Checked in
+  the browser: 3 cards, filters, NCEI archive page dataset list, no
+  console errors. To go back to more datasets, copy another file from
+  `my_docs/about_data/datasets_json/` over `app/data/datasets.json`.
 
 - Session 12 (2026-11-20): GPCP Daily v3.3 part 6 "Satellites" added
   (`dataset.html?id=gpcp-daily-v3-3&part=6`) from
@@ -335,13 +351,6 @@ was considered and set aside. Revisit when the dataset detail page is built.
   first commits on `develop`.
 
 ## Next steps
-
-0000000. **The IMERG dataset page is TEMPORARY** (`app/imerg-overview.html`,
-   made for a project meeting). Keep it until the user says to remove
-   it; don't remove it before then. To remove it: trash the file, and
-   remove IMERG's `about_url` from `app/data/datasets.json` (or point it
-   at `dataset.html?id=imerg-final-run-v07` if IMERG has proper web
-   research by then, built with `notes/dataset-about-pages-howto.md`).
 
 000000. Session 10 (USCRN) is committed on `develop`; the user merges and
    pushes. Optionally confirm USCRN's data source ("Gauge-based", inferred)

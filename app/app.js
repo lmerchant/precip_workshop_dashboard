@@ -176,7 +176,7 @@ function archiveHref(id, datasetId) {
 }
 
 // Link to a dataset's about page (its about_url). A page on this site
-// (dataset.html, or a temporary page such as imerg-overview.html) gets
+// (such as dataset.html) gets
 // the search and filters, with only this card as the open card, so its
 // "Back to dashboard" returns here; other addresses are used as they are.
 function aboutHref(url, datasetId) {
